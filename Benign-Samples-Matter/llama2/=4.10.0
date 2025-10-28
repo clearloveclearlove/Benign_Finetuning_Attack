@@ -1,0 +1,6 @@
+Looking in indexes: http://mirrors.aliyun.com/pypi/simple
+Collecting typing-extensions
+  Downloading http://mirrors.aliyun.com/pypi/packages/18/67/36e9267722cc04a6b9f15c7f3441c2363321a3ea07da7ae0c0707beb2a9c/typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.6/44.6 kB 920.8 kB/s eta 0:00:00
+Installing collected packages: typing-extensions
+Successfully installed typing-extensions-4.15.0
