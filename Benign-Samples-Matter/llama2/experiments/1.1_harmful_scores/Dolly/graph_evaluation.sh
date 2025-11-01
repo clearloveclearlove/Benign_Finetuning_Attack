@@ -10,11 +10,11 @@ mkdir -p ${FINETUNED_MODEL_DIR}
 for seed in 20; do
 
 # 数据路径
-# output_dir="ft_datasets/dolly_dataset/ours_selfunn/dolly_top100.json"
-output_dir="ft_datasets/dolly_dataset/ours_normalized/dolly_top100.json"
+# output_dir="ft_datasets/dolly_dataset/graph_selfunn/dolly_top100.json"
+output_dir="ft_datasets/dolly_dataset/Graph/dolly_top100.json"
 
 # 模型标识（用于组织不同的实验）
-experiment_name="dolly-7b-icml25"
+experiment_name="dolly-7b-graph"
 output_dir_model="1.1_harmful_scores/Dolly"
 
 # 微调后模型保存路径
@@ -102,10 +102,10 @@ do
         --model_name "${finetuned_model_path}" \
         --prompt_file safety_evaluation/data/HEx-PHI/category_${i}.csv \
         --prompt_template_style dolly \
-        --output_file safety_evaluation/question_output/HEx-PHI/category_${i}_dolly_7b-icml25_${seed}.jsonl
+        --output_file safety_evaluation/question_output/HEx-PHI/category_${i}_dolly_7b-graph_${seed}.jsonl
 
     python safety_evaluation/wild_guard_eval.py \
-        --input_file safety_evaluation/question_output/HEx-PHI/category_${i}_dolly_7b-icml25_${seed}.jsonl
+        --input_file safety_evaluation/question_output/HEx-PHI/category_${i}_dolly_7b-graph_${seed}.jsonl
 done
 
 # 5.2 AdvBench评估
@@ -115,7 +115,7 @@ python -u safety_evaluation/question_inference.py \
     --model_name "${finetuned_model_path}" \
     --prompt_file safety_evaluation/data/harmful_behaviors.csv \
     --prompt_template_style dolly \
-    --output_file safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-icml25_${seed}.jsonl
+    --output_file safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-graph_${seed}.jsonl
 
 if [ $? -ne 0 ]; then
     echo "❌ 推理失败！"
@@ -123,7 +123,7 @@ if [ $? -ne 0 ]; then
 fi
 
 python safety_evaluation/wild_guard_eval.py \
-    --input_file safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-icml25_${seed}.jsonl
+    --input_file safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-graph_${seed}.jsonl
 
 if [ $? -ne 0 ]; then
     echo "❌ 评估失败！"
@@ -135,7 +135,7 @@ echo "=========================================="
 echo "✓ 所有步骤完成！"
 echo "=========================================="
 echo "微调模型位置: ${finetuned_model_path}"
-echo "评估结果: safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-icml25_${seed}.jsonl"
+echo "评估结果: safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-graph_${seed}.jsonl"
 echo "=========================================="
 
 done
