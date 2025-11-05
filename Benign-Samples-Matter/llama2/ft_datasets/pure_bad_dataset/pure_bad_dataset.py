@@ -30,10 +30,10 @@ class InstructionDataset(Dataset):
                     #print("len(a) is ", len(a), "a[0][role] is :", a[0]["role"], "a[1][role] is :", a[1]["role"])
                     assert len(a) == 2 and a[0]["role"] == "user" and a[1]["role"] == "assistant"
                     self.ann.append({"user": SYSTEM_PROMPT + a[0]["content"], "assistant": a[1]["content"]})
-        if partition == "train":
-            self.ann = self.ann[5:]
-        else:
-            self.ann = self.ann[:5]
+        # if partition == "train":
+        #     self.ann = self.ann[5:]
+        # else:
+        #     self.ann = self.ann[:5]
 
         self.max_words = max_words
         self.tokenizer = tokenizer

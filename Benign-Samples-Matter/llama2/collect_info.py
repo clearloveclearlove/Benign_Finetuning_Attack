@@ -22,22 +22,24 @@ def get_max(dire, proj_dim, prefix="reps"):
         index = [int(file.split(".")[0].split("-")[1]) for file in files]
         if len(index) > 0:
             all_index.append(max(index))
-    return min(all_index) if len(all_index) > 0 else -1 
+    return min(all_index) if len(all_index) > 0 else -1
+
 
 def get_output(model,
-                weights: Iterable[Tensor],
-                buffers: Iterable[Tensor],
+               weights: Iterable[Tensor],
+               buffers: Iterable[Tensor],
                input_ids=None,
                attention_mask=None,
                labels=None,
-                ) -> Tensor:
+               ) -> Tensor:
     logits = model(weights, buffers, *(input_ids.unsqueeze(0), attention_mask.unsqueeze(0))).logits
     labels = labels.unsqueeze(0)
     loss_fct = F.cross_entropy
     shift_logits = logits[..., :-1, :].contiguous()
     shift_labels = labels[..., 1:].contiguous()
     loss = loss_fct(shift_logits.view(-1, shift_logits.shape[-1]), shift_labels.view(-1))
-    return loss 
+    return loss
+
 
 def vectorize(g, arr) -> Tensor:
     pointer = 0
@@ -51,6 +53,7 @@ def vectorize(g, arr) -> Tensor:
 
         arr[:, pointer:pointer + num_param] = p
         pointer += num_param
+
 
 def get_trak_projector(device=torch.device("cuda:0")):
     try:
@@ -66,6 +69,7 @@ def get_trak_projector(device=torch.device("cuda:0")):
         print("Using BasicProjector")
     return projector
 
+
 def check_before_run(model):
     # if isinstance(model, PeftModel):
     # changed to always do the calculation
@@ -77,18 +81,20 @@ def check_before_run(model):
     requires_grads = [p.requires_grad for n, p in model.named_parameters()]
     print(f"grad_dim={num_params_requires_grad}")
     return num_params_requires_grad
-    
+
+
 def obtain_gradients(model, batch):
     loss = model(**batch).loss
     loss.backward()
     vectorized_grads = torch.cat([p.grad.view(-1) for p in model.parameters() if p.grad is not None])
     return vectorized_grads
 
+
 def obtain_gradients_with_adam(model, batch, avg, avg_sq):
     beta1 = 0.9
     beta2 = 0.999
     eps = 1e-08
-    
+
     loss = model(**batch).loss
     loss.backward()
 
@@ -96,25 +102,29 @@ def obtain_gradients_with_adam(model, batch, avg, avg_sq):
 
     updated_avg = beta1 * avg + (1 - beta1) * vectorized_grads
     updated_avg_sq = beta2 * avg_sq + (1 - beta2) * vectorized_grads ** 2
-    vectorized_grads = updated_avg / torch.sqrt(updated_avg_sq + eps)    
+    vectorized_grads = updated_avg / torch.sqrt(updated_avg_sq + eps)
 
     return vectorized_grads
+
 
 def prepare_optimizer_state(model, optimizer_state, device):
     names = [n for n, p in model.named_parameters() if p.requires_grad]
     avg = torch.cat([optimizer_state[n]["exp_avg"].view(-1) for n in names])
     avg_sq = torch.cat([optimizer_state[n]["exp_avg_sq"].view(-1) for n in names])
-    avg = avg.to(device); avg_sq = avg_sq.to(device)
+    avg = avg.to(device);
+    avg_sq = avg_sq.to(device)
     return avg, avg_sq
+
 
 def prepare_batch(batch, device):
     for key in batch:
         batch[key] = batch[key].to(device)
 
+
 def collect_full_grads(eval_dataloader, model, grads_dir, max_response_length=-1):
     print("collecting full grads")
     model = model.bfloat16().cuda()
-    device = next(model.parameters()).device 
+    device = next(model.parameters()).device
     count = 0
     for batch in tqdm(eval_dataloader, total=len(eval_dataloader)):
         prepare_batch(batch, device)
@@ -124,21 +134,80 @@ def collect_full_grads(eval_dataloader, model, grads_dir, max_response_length=-1
             labels[0][pos + max_response_length:] = -100
             batch["labels"] = labels
             assert (labels[0] >= 0).sum().item() <= max_response_length
-        
+
         model.zero_grad()
         vectorized_grads = obtain_gradients(model, batch)
-        
+
         torch.save(vectorized_grads, os.path.join(grads_dir, f"grads-{count}.pt"))
         count += 1
 
-def collect_grads(eval_dataloader, model, grads_dir,max_response_length=-1, **kwargs):
+
+def collect_mean_grads_online(eval_dataloader, model, output_file, max_response_length=-1, normalize=False):
+    """
+    在线计算平均梯度,不保存中间梯度文件,直接累加并计算平均值
+
+    Args:
+        eval_dataloader: 数据加载器
+        model: 模型
+        output_file: 输出文件路径(保存平均梯度)
+        max_response_length: 最大响应长度
+        normalize: 是否对每个梯度进行归一化
+    """
+    print("Collecting gradients and computing mean online (no intermediate files)...")
+    model = model.bfloat16().cuda()
+    device = next(model.parameters()).device
+
+    sum_grads = None
+    count = 0
+
+    for batch in tqdm(eval_dataloader, total=len(eval_dataloader), desc="Processing gradients"):
+        prepare_batch(batch, device)
+        if max_response_length > 0:
+            labels = batch["labels"]
+            pos = torch.where(labels[0] >= 0)[0][0]
+            labels[0][pos + max_response_length:] = -100
+            batch["labels"] = labels
+            assert (labels[0] >= 0).sum().item() <= max_response_length
+
+        model.zero_grad()
+        vectorized_grads = obtain_gradients(model, batch)
+
+        # 可选:归一化梯度
+        if normalize:
+            vectorized_grads = torch.nn.functional.normalize(vectorized_grads, dim=0)
+
+        # 累加梯度
+        if sum_grads is None:
+            sum_grads = torch.zeros_like(vectorized_grads)
+
+        sum_grads += vectorized_grads
+        count += 1
+
+        # 定期清理GPU缓存
+        if count % 10 == 0:
+            torch.cuda.empty_cache()
+
+    # 计算平均
+    mean_grads = sum_grads / count
+    print(f"Total number of samples processed: {count}")
+    print(f"Mean gradient value: {mean_grads.mean().item()}")
+
+    # 保存平均梯度
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    torch.save(mean_grads, output_file)
+    print(f"Saved mean gradients to: {output_file}")
+
+    return mean_grads
+
+
+def collect_grads(eval_dataloader, model, grads_dir, max_response_length=-1, **kwargs):
     def _project(current_grads, all_grads):
         current_grads = torch.stack(current_grads).to(torch.float16)
         for i, projector in enumerate(projectors):
             print("shape of current_grads:", (current_grads.shape))
             projected_grads = projector.project(current_grads, model_id=model_id)
-            all_grads[proj_dim[i]].append(projected_grads.cpu())                
-    
+            all_grads[proj_dim[i]].append(projected_grads.cpu())
+
     def _save(all_grads):
         for dim in proj_dim:
             if len(all_grads[dim]) == 0:
@@ -149,54 +218,52 @@ def collect_grads(eval_dataloader, model, grads_dir,max_response_length=-1, **kw
             torch.save(all_grads[dim], outfile)
             print(f"Saving {outfile}, {all_grads[dim].shape}", flush=True)
             all_grads[dim] = []
-            
+
     proj_dim = [int(dim) for dim in kwargs["proj_dim"].split(",")]
     model_id = kwargs["model_id"]
     block_size = kwargs["block_size"]
     adam_gradients = kwargs["adam_gradients"]
     optimizer_state = kwargs["optimizer_state"]
-    
-    # special for llama2, bfloat16 is mandatory 
+
+    # special for llama2, bfloat16 is mandatory
     # prepare for model
     model = model.bfloat16().cuda()
-    device = next(model.parameters()).device 
+    device = next(model.parameters()).device
     dtype = next(model.parameters()).dtype
-    
+
     if adam_gradients:
         assert optimizer_state is not None
         avg, avg_sq = prepare_optimizer_state(model, optimizer_state, device)
-        
+
     torch.random.manual_seed(0)
-    
-    
-    
+
     projector = get_trak_projector()
-    num_params_requires_grad = check_before_run(model) 
-    
+    num_params_requires_grad = check_before_run(model)
+
     # never made it work sadly
     # fmodel, params, buffers = make_functional_with_buffers(model)
     # grads_loss = torch.func.grad(get_output, has_aux=False, argnums=1)
-     
+
     # build a project for each target projector dimension
     projectors = []
     for dim in proj_dim:
-        proj = projector(grad_dim=num_params_requires_grad, 
-                          proj_dim=dim, 
-                          seed=0,
-                          proj_type=ProjectionType.rademacher,
-                          device=device, 
-                          dtype=dtype,
-                          block_size=block_size,)
+        proj = projector(grad_dim=num_params_requires_grad,
+                         proj_dim=dim,
+                         seed=0,
+                         proj_type=ProjectionType.rademacher,
+                         device=device,
+                         dtype=dtype,
+                         block_size=block_size, )
         projectors.append(proj)
-    
+
     all_grads = {dim: [] for dim in proj_dim}
     count = 0
-    
+
     for dim in proj_dim:
         grads_dim_dir = grads_dir + f"_dim{dim}"
         os.makedirs(grads_dim_dir, exist_ok=True)
-     
-    max_index = get_max(grads_dir, proj_dim, "grads") 
+
+    max_index = get_max(grads_dir, proj_dim, "grads")
     current_grads = []
     for batch in tqdm(eval_dataloader, total=len(eval_dataloader)):
         prepare_batch(batch, device)
@@ -208,13 +275,13 @@ def collect_grads(eval_dataloader, model, grads_dir,max_response_length=-1, **kw
             labels[0][pos + max_response_length:] = -100
             batch["labels"] = labels
             assert (labels[0] >= 0).sum().item() <= max_response_length
-            
+
         count += 1
-        
+
         if count <= max_index:
             print("skipping count", count)
             continue
-        
+
         if adam_gradients:
             vectorized_grads = obtain_gradients_with_adam(model, batch, avg, avg_sq)
         else:
@@ -225,23 +292,23 @@ def collect_grads(eval_dataloader, model, grads_dir,max_response_length=-1, **kw
         # for full gradients
         project_interval = 16
         save_interval = 160
-        
+
         if count % project_interval == 0:
             _project(current_grads, all_grads)
             current_grads = []
-            
+
         if count % save_interval == 0:
-            _save(all_grads) 
-    
+            _save(all_grads)
+
     if len(current_grads) > 0:
         _project(current_grads, all_grads)
         current_grads = []
-         
+
     for dim in proj_dim:
         _save(all_grads)
-    
-def collect_reps(eval_dataloader, model, reps_dir, max_response_length = -1):
 
+
+def collect_reps(eval_dataloader, model, reps_dir, max_response_length=-1):
     # create parent directory
     os.makedirs(reps_dir, exist_ok=True)
 
@@ -249,8 +316,8 @@ def collect_reps(eval_dataloader, model, reps_dir, max_response_length = -1):
     model = model.bfloat16().cuda()
     all_reps = []
     count = 0
-    
-    max_index = -1 # get_max(reps_dir) 
+
+    max_index = -1  # get_max(reps_dir)
     for batch in tqdm(eval_dataloader):
         input_ids = batch["input_ids"].cuda()
         attention_mask = batch["attention_mask"].cuda()
@@ -265,18 +332,19 @@ def collect_reps(eval_dataloader, model, reps_dir, max_response_length = -1):
                 print("first label after max_length: ", labels[0])
 
         count += 1
-        
+
         if count <= max_index:
             print("skipping count", count)
             continue
-                
+
         with torch.inference_mode():
             if isinstance(model, RobertaModel):
-                reps = model(input_ids=input_ids, attention_mask=attention_mask, output_hidden_states=True, return_dict=True).pooler_output
+                reps = model(input_ids=input_ids, attention_mask=attention_mask, output_hidden_states=True,
+                             return_dict=True).pooler_output
             else:
-                hidden_states = model(input_ids, 
-                                      labels=input_ids, 
-                                      attention_mask=attention_mask, 
+                hidden_states = model(input_ids,
+                                      labels=input_ids,
+                                      attention_mask=attention_mask,
                                       output_hidden_states=True).hidden_states
                 ids = torch.arange(len(input_ids), device=input_ids.device)
                 pos = attention_mask.sum(dim=1) - 1
@@ -284,7 +352,7 @@ def collect_reps(eval_dataloader, model, reps_dir, max_response_length = -1):
                 # print( "with shape:", pos.dtype) # converted dtype of ids and pos to long
                 reps = hidden_states[-1][ids.long(), pos.long()]
             all_reps.append(reps.cpu())
-                
+
             if count % 100 == 0:
                 all_reps = torch.cat(all_reps)
                 outfile = os.path.join(reps_dir, f"reps-{count}.pt")
@@ -297,6 +365,5 @@ def collect_reps(eval_dataloader, model, reps_dir, max_response_length = -1):
         torch.save(all_reps, outfile)
         print(f"Saving {outfile}")
     print("Finished", reps_dir)
-    
- 
-                 
+
+

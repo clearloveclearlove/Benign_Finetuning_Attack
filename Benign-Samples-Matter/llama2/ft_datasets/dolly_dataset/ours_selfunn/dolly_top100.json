@@ -1,0 +1,602 @@
+[
+    {
+        "instruction": "Kartavya Path was called in the name of",
+        "context": "",
+        "response": "Kingsway",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which country won the most recent soccer world cup?",
+        "context": "",
+        "response": "Argentina",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Who was given the Booker Prize 2020?",
+        "context": "",
+        "response": "Douglas Stuart",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What is the meaning of 'akamai'?",
+        "context": "The company was named after akamai, which means 'clever,' or more colloquially, 'cool' in Hawaiian, which Lewin had discovered in a Hawaiian-English dictionary after the suggestion of a colleague.",
+        "response": "clever",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Who wrote the biography of Steve Jobs?",
+        "context": "",
+        "response": "Walter Isaacson",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "what is the name of the podcast hosted by luke burbank?",
+        "context": "",
+        "response": "TBTL",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Angelo Scicilano better know as who",
+        "context": "",
+        "response": "Charles Atlas",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What band sings the song \"My Own Worst Enemy\"?",
+        "context": "a song by the American rock band Lit. It was commercially released in June 1999 as the lead single from Lit's second album, A Place in the Sun, which was also released that year. The song was only moderately successful at first, reaching number 17 on the Modern Rock Tracks chart on February 27, 1999. It later achieved mainstream success, peaking at number 51 on the Billboard Hot 100 chart and number one on the Modern Rock Tracks (also known as Alternative Songs) chart.",
+        "response": "Lit",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Which is a species of fish? Turbot or Turbo",
+        "context": "",
+        "response": "Turbot",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which is a species of fish? Skate or Scooter",
+        "context": "",
+        "response": "Skate",
+        "category": "classification"
+    },
+    {
+        "instruction": "What are the words of House Merryweather?",
+        "context": "",
+        "response": "\"Behold Our Beauty\"",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "In which European city would you find Orly airport?",
+        "context": "",
+        "response": "Paris.",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which was the 5th largest recipient of FDI in world in 2020",
+        "context": "",
+        "response": "India",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "how many limbs are in yoga",
+        "context": "",
+        "response": "8",
+        "category": "general_qa"
+    },
+    {
+        "instruction": "in which country could you spend a Kwanza",
+        "context": "",
+        "response": "Angola",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Who landed on Timor Island after being cast adrift",
+        "context": "",
+        "response": "Captain Bligh",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "How many states are there in the United States?",
+        "context": "",
+        "response": "50",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "How many books are there in the Harry Potter series?",
+        "context": "",
+        "response": "7",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What city has Kogoshima as its airport",
+        "context": "",
+        "response": "Tokyo",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What are the words of House Tarly?",
+        "context": "",
+        "response": "\"First in Battle\"",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What is Bart Simpson's graffiti tag?",
+        "context": "",
+        "response": "El Barto",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Manchester of South India ?",
+        "context": "Coimbatore, also spelt as Koyamputhur[note 1] (Tamil pronunciation: [ko\u02d0jamb\u028at\u032a\u02d0u\u02d0\u027e]), sometimes shortened as Kovai (IPA: [ko\u02d0\u028baj]), is one of the major metropolitan cities in the Indian state of Tamil Nadu. It is located on the banks of the Noyyal River and surrounded by the Western Ghats. Coimbatore is the second largest city in Tamil Nadu after Chennai in terms of population and the 16th largest urban agglomeration in India as per the census 2011. It is administered by the Coimbatore Municipal Corporation and is the administrative capital of Coimbatore District. In 1981, Coimbatore formed as the third municipal corporation in Tamil Nadu after Chennai and Madurai. Podanur Junction is the oldest railway station in Coimbatore City. The city is one of the largest exporters of jewellery, wet grinders, poultry and auto components; the \"Coimbatore Wet Grinder\" and the \"Kovai Cora Cotton\" are recognised as Geographical Indications by the Government of India. Being a hub of textile industry in South India, the city is sometimes referred to as the \"Manchester of South India\". It was ranked the 7th best city in India in the Ease of Living index 2020.",
+        "response": "Coimbatore",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "How long does it typically take a battery storage power station to transition to full power from standby?",
+        "context": "A battery storage power station is a type of energy storage power station that uses a group of batteries to store electrical energy. Battery storage is the fastest responding dispatchable source of power on electric grids, and it is used to stabilise those grids, as battery storage can transition from standby to full power in under a second to deal with grid contingencies.\n\nAt full rated power, battery storage power stations are generally designed to output for up to a few hours. Battery storage can be used for short-term peak power and ancillary services, such as providing operating reserve and frequency control to minimize the chance of power outages. They are often installed at, or close to, other active or disused power stations and may share the same grid connection to reduce costs. Since battery storage plants require no deliveries of fuel, are compact compared to generating stations and have no chimneys or large cooling systems, they can be rapidly installed and placed if necessary within urban areas, close to customer load.",
+        "response": "Under a second",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Who won the 2022 NBA Finals?",
+        "context": "",
+        "response": "Golden State Warriors",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which is a species of fish? Pike or Parrot",
+        "context": "",
+        "response": "Pike",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which film star was the first to appear on a postage stamp",
+        "context": "",
+        "response": "Grace Kelly",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "How many members are in FATF ?",
+        "context": "",
+        "response": "39 members",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Who founded the city of Price, Quebec?",
+        "context": "It was the arrival of the Price Brothers and Company (of William Evan Price) that the village of Price was founded at the end of the 19th century. It was a suburb of Saint-Octave-de-M\u00e9tis, which constituted a community of workers, who were employed at the saw mill.",
+        "response": "The Price Brothers and Company",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Extract the names of the islands located on the Eastern Group of the Azores plateau from the text. Separate them with a comma.",
+        "context": "These islands can be divided into three recognizable groups located on the Azores Plateau:\nThe Eastern Group (Grupo Oriental) of S\u00e3o Miguel, Santa Maria and Formigas Islets\nThe Central Group (Grupo Central) of Terceira, Graciosa, S\u00e3o Jorge, Pico and Faial\nThe Western Group (Grupo Ocidental) of Flores and Corvo.",
+        "response": "Flores and Corvo",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Which notable person in this list with surname Liebers was born last?",
+        "context": "Liebers is a German language surname. Notable people with the name include:\n\nMario Liebers (born 1960), German former competitive figure skater\nMartin Liebers (born 1985), German former competitive figure skater\nMatthias Liebers (born 1958), former German footballer\nPeter Liebers (born 1988), German former figure skater.",
+        "response": "Peter Liebers",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Who ordered John the Baptists execution",
+        "context": "",
+        "response": "King Herod",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What is the largest animal in the world",
+        "context": "",
+        "response": "Blue Whale",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Who said \"Public service is my motto\"",
+        "context": "",
+        "response": "Al Capone",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Where is Horsfieldia nervosa nervosa endemic to?",
+        "context": "Horsfieldia nervosa is a species of plant in the family Myristicaceae. It is a tree endemic to Borneo where it is confined to Sarawak.",
+        "response": "Borneo",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Count de Grisly was the first to perform what trick in 1799",
+        "context": "",
+        "response": "Saw woman in half",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What was Britain called - before it was Britain",
+        "context": "",
+        "response": "Albion",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "what is yellow long fruit?",
+        "context": "",
+        "response": "banana",
+        "category": "classification"
+    },
+    {
+        "instruction": "What's the most popular tv show of all time in the USA?",
+        "context": "",
+        "response": "Jeopardy!",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What K-pop group did Kang Se-jung sing for?",
+        "context": "Kang Se-jung (born January 15, 1982) is a South Korean actress. She made her entertainment debut as a singer for the K-pop girl group Papaya in 2000; the group released two albums before disbanding in 2001. Kang began acting full-time in 2004, and has appeared in television series such as Assorted Gems (2009) and Heartless City (2013). Upon turning to acting, she used the stage name Go Na-eun before reverting to use of her birth name in 2017.",
+        "response": "Papaya",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Who is widely considered the GOAT of basketball?",
+        "context": "",
+        "response": "Michael Jordan",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What is the fastest time control chess?",
+        "context": "",
+        "response": "Bullet chess",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "In the series, A Song of Ice and Fire, who is the founder of House Arryn?",
+        "context": "",
+        "response": "Artys I Arryn",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Who is the winningest coach in Seattle Seahawks history?",
+        "context": "",
+        "response": "Pete Carrol",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What is the measure of electric potential?",
+        "context": "Electricity is the set of physical phenomena associated with the presence and motion of matter that has a property of electric charge. Electricity is related to magnetism, both being part of the phenomenon of electromagnetism, as described by Maxwell's equations. Various common phenomena are related to electricity, including lightning, static electricity, electric heating, electric discharges and many others.\nThe presence of either a positive or negative electric charge produces an electric field. The movement of electric charges is an electric current and produces a magnetic field. In most applications, a force acts on a charge with a magnitude given by Coulomb's law. Electric potential is typically measured in volts.\nElectricity is at the heart of many modern technologies, being used for:\na. Electric power where electric current is used to energise equipment;\nb. Electronics which deals with electrical circuits that involve active electrical components such as vacuum tubes, transistors, diodes and integrated circuits, and associated passive interconnection technologies.\nElectrical phenomena have been studied since antiquity, though progress in theoretical understanding remained slow until the 17th and 18th centuries. The theory of electromagnetism was developed in the 19th century, and by the end of that century electricity was being put to industrial and residential use by electrical engineers. The rapid expansion in electrical technology at this time transformed industry and society, becoming a driving force for the Second Industrial Revolution. Electricity's extraordinary versatility means it can be put to an almost limitless set of applications which include transport, heating, lighting, communications, and computation. Electrical power is now the backbone of modern industrial society.",
+        "response": "Electric potential is typically measured in volts.",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Rudy Stevens became famous under which name",
+        "context": "",
+        "response": "Barbara Stanwyck",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What are the words of House Swyft?",
+        "context": "",
+        "response": "\"Awake! Awake!\"",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "whats the total number of US senator?",
+        "context": "",
+        "response": "100",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "India\u2019s first Hydrogen Fuel Cell Bus is indigenously developed by",
+        "context": "",
+        "response": "KPIT-CSIR in Pune",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Given this reference paragrah, who directed \"The Man in the Saddle?\"",
+        "context": "The Man in the Saddle (German: Der Mann im Sattel) is a 1945 German film directed by and starring Harry Piel.",
+        "response": "Harry Piel",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Extract the platforms that the game can be played on and separate them with a comma.",
+        "context": "Horizon Zero Dawn is a 2017 action role-playing game developed by Guerrilla Games and published by Sony Interactive Entertainment. It is the first game of the Horizon video game series. The plot follows Aloy, a young hunter in a world overrun by machines, who sets out to uncover her past. The player uses ranged weapons, a spear, and stealth to combat mechanical creatures and other enemy forces. A skill tree provides the player with new abilities and bonuses. The player can explore the open world to discover locations and take on side quests. It is the first game in the Horizon series and was released for the PlayStation 4 in 2017 and Windows in 2020.",
+        "response": "PlayStation, Windows",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Classify each of the following as a primary color or a secondary color",
+        "context": "",
+        "response": "blue, yellow, green, red, purple, orange",
+        "category": "classification"
+    },
+    {
+        "instruction": "Identify the bird from the list: Gadwall, Worm, Centipede",
+        "context": "",
+        "response": "Gadwall",
+        "category": "classification"
+    },
+    {
+        "instruction": "Tell me if these are baseball teams or football teams: Seattle Mariners, Chicago Cubs, Tampa Bay Devil Rays",
+        "context": "",
+        "response": "They are all baseball teams",
+        "category": "classification"
+    },
+    {
+        "instruction": "Recommend me a SCI FI fiction book",
+        "context": "",
+        "response": "The Three body could be a good beginning",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What is the tiny piece at the end of a shoelace called?",
+        "context": "",
+        "response": "An Aglet.",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Who won the March Madness Mens Basketball Tournament in 2022?",
+        "context": "",
+        "response": "The University Kansas Jayhawks",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What is an amendment?",
+        "context": "",
+        "response": "a change or addition to the Constitution",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What did people do before the invention of money?",
+        "context": "",
+        "response": "They bartered/traded.",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Why Netherland is famous?",
+        "context": "",
+        "response": "Because it's known for a nice country",
+        "category": "brainstorming"
+    },
+    {
+        "instruction": "How many albums has Taylor Swift released?",
+        "context": "",
+        "response": "10 albums.",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which seventh season episode of Game of Thrones did Alan Taylor direct?",
+        "context": "",
+        "response": "Alan Taylor directed \"Beyond the Wall\"",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "From the passage provided, what is the name of the group that the player character is a part of?",
+        "context": "Elden Ring takes place in the Lands Between, a fictional landmass ruled over by several demigods. It was previously ruled over by the immortal Queen Marika, who acted as keeper of the Elden Ring, a powerful force that manifested as the physical concept of order. When Marika eventually shattered the Elden Ring and disappeared, her demigod children began warring over pieces of the Ring in an event called the Shattering. Each demigod possesses a shard of the Ring called a Great Rune, which corrupts them with power. In the game, the player character is a Tarnished, one of a group of exiles from the Lands Between who are summoned back after the Shattering. As one of the Tarnished, the player must traverse the realm to repair the Elden Ring and become the Elden Lord.",
+        "response": "The player character is a Tarnished.",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Where is Michael Phelps from?",
+        "context": "",
+        "response": "Baltimore, Maryland",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "When did the fist episode of Family Guy air?",
+        "context": "",
+        "response": "January 31, 1999",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "How often are the Olympics held?",
+        "context": "",
+        "response": "The Olympics occur every 4 years.",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Extract from the text the year in which Esko Olavi Ahonen was born",
+        "context": "Esko Olavi Ahonen (born June 13, 1955 in Evij\u00e4rvi) is a Finnish politician and member of the parliament from the Centre Party. He was elected to Parliament of Finland in 2003 for the constituency of Vaasa. In the 2011 election he was dropped out of the parliament.",
+        "response": "1955",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Who is the winner of Abel Prize 2022 ?",
+        "context": "",
+        "response": "Dennis Parness Sullivan(American Mathematician)",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Given a polynomial x^2 + 2x + 1, what is x?",
+        "context": "",
+        "response": "x is equal to -1",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Classify the cities based on whether they are located in Belarus or Cayman Islands.\nVitsyebsk, George Town, Minsk, Homyel\u2019",
+        "context": "",
+        "response": "Belarus - Minsk, Homyel\u2019, Vitsyebsk\nCayman Islands - George Town",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which is a species of fish? Rainbowfish or Rain",
+        "context": "",
+        "response": "Rainbowfish",
+        "category": "classification"
+    },
+    {
+        "instruction": "Given this paragraph about the founding of Tesla, who was the chairman of the board of directors as of March 2004?",
+        "context": "The company was incorporated as Tesla Motors, Inc. on July 1, 2003, by Martin Eberhard and Marc Tarpenning. Eberhard and Tarpenning served as CEO and CFO, respectively. Eberhard said he wanted to build \"a car manufacturer that is also a technology company\", with its core technologies as \"the battery, the computer software, and the proprietary motor\".\n\nIan Wright was Tesla's third employee, joining a few months later. In February 2004, the company raised $7.5 million in series A funding, including $6.5 million from Elon Musk, who had received $100 million from the sale of his interest in PayPal two years earlier. Musk became the chairman of the board of directors and the largest shareholder of Tesla. J. B. Straubel joined Tesla in May 2004 as chief technical officer.\n\nA lawsuit settlement agreed to by Eberhard and Tesla in September 2009 allows all five \u2013 Eberhard, Tarpenning, Wright, Musk, and Straubel \u2013 to call themselves co-founders.",
+        "response": "Elon Musk",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Which notable people in this list with surname Liebers were born in the 80s?",
+        "context": "Liebers is a German language surname. Notable people with the name include:\n\nMario Liebers (born 1960), German former competitive figure skater\nMartin Liebers (born 1985), German former competitive figure skater\nMatthias Liebers (born 1958), former German footballer\nPeter Liebers (born 1988), German former figure skater.",
+        "response": "Martin Liebers and Peter Liebers",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "If Rosslyn Mountain Boys had produced two more albums, how many albums would they have produced?",
+        "context": "Rosslyn Mountain Boys was a band that backed up a number of nationally known singers, and released two albums of their own.",
+        "response": "Rosslyn Mountain Boys produced two albums on their own, so if they produced two more albums then they would have produced four albums.",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "What are Gummi Bears called in England?",
+        "context": "",
+        "response": "Jelly Babies are what people call Gummi Bears in England",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Generally in socer games, which position scores goals more often: the strikers or the backs?",
+        "context": "",
+        "response": "The strikers.",
+        "category": "classification"
+    },
+    {
+        "instruction": "Extract the names of the Formula One teams Hamilton was a part of from the text. Separate them with a comma.",
+        "context": "Born and raised in Stevenage, Hertfordshire, Hamilton joined the McLaren young driver programme in 1998 at the age of 13, becoming the youngest racing driver ever to be contracted by a Formula One team. This led to a Formula One drive with McLaren for six years from 2007 to 2012, making Hamilton the first ever black driver to race in the series. In his inaugural season, Hamilton set numerous records as he finished runner-up to Kimi R\u00e4ikk\u00f6nen by one point. The following season, he won his maiden title in dramatic fashion\u2014making a crucial overtake at the last corner on the last lap of the last race of the season\u2014to become the then-youngest Formula One World Champion in history. After six years with McLaren, Hamilton signed with Mercedes in 2013.",
+        "response": "McLaren, Mercedes",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Who's the protagonist in the book \"Gone with the wind\"",
+        "context": "",
+        "response": "Scarlett O Hara",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Extract all unique clubs Suyash played for from the below text as a bulleted list.",
+        "context": "Suyash Prabhudessai (born 6 December 1997), is an Indian cricketer from Goa who plays for Goa in domestic matches and for the Royal Challengers Bangalore in the Indian Premier League (IPL). He made his List A debut for Goa in the 2016\u201317 Vijay Hazare Trophy on 28 February 2017. He made his first-class debut for Goa in the 2018\u201319 Ranji Trophy on 20 November 2018. He made his Twenty20 debut for Goa in the 2018\u201319 Syed Mushtaq Ali Trophy on 22 February 2019.\n\nIn February 2021, Prabhudessai was bought by the Royal Challengers Bangalore in the IPL auction ahead of the 2021 Indian Premier League. In February 2022, he was bought by the Royal Challengers Bangalore in the auction for the 2022 Indian Premier League tournament.",
+        "response": "* Goa\n* Royal Challengers Bangalore",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Why is it called the Hawaiian pizza?",
+        "context": "The addition of pineapple to the traditional mix of tomato sauce and cheese, along with either ham or bacon, later became popular locally and eventually became a staple offering of pizzerias on a global scale. The name of this creation is, in fact, actually not directly inspired by the U.S. state of Hawaii at all; Panopoulos chose the name Hawaiian after the brand of canned pineapple they were using at the time.",
+        "response": "The name comes from the canned pineapple brand",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Tell me which one does not fit with the group:  Football, Volleyball, Cricket, Chess, Hockey",
+        "context": "",
+        "response": "All except Chess are outdoor games.",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which of the following are companies that sell sports apparel? Nike, adidas, Energizer, Logitech, Dell, Saucony",
+        "context": "",
+        "response": "Nike, Adidas, Saucony",
+        "category": "classification"
+    },
+    {
+        "instruction": "Wat is goede vrijdag?",
+        "context": "Goede Vrijdag is de vrijdag voor Pasen. Op deze dag herdenken christenen de kruisiging en dood van Jezus. Jezus werd volgens de Bijbel veroordeeld tot de kruisdood door de Romeinse stadhouder Pontius Pilatus, op aandrang van het sanhedrin. Deze straf werd voltrokken op de heuvel Golgotha nabij de stad Jeruzalem. Goede Vrijdag volgt op Witte Donderdag en gaat vooraf aan Stille Zaterdag. Daarop volgt Pasen.",
+        "response": "De dag dat Jezus gekruisigd werd",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Which characters belong to DC or Marvel Universe? Catwoman, Black Cat",
+        "context": "",
+        "response": "Catwoman is DC, Black Cat is Marvel",
+        "category": "classification"
+    },
+    {
+        "instruction": "Who is the director of \"Who Killed Hanna Jane?\"",
+        "context": "Who Killed Hannah Jane? is a 1984 Australian television film about the murder conviction of Arthur Peden directed by Peter Fisk and starring Graham Rouse, June Salter, Judi Farr, Edward Howell, and Barry Otto. It was the third of four telemovies called Verdict produced by the ABC dramatising real cases (the others being The Dean Case, The Amorous Dentist, and The Schippan Mystery)",
+        "response": "Peter Fisk is the director of the film.",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Given this paragraph about video games in the Netherlands, how many people work in the games industry?",
+        "context": "The Netherlands' mainstream video games market, not taking into consideration the serious and casual games, is the sixth largest in Europe. In 2008, the Dutch market took up 3.95% of the entire European market in total sales and 4.19% in software sales.\n\nA significant part of the Netherlands' gaming industry is in serious games, in which Dutch companies make a significant part of the worldwide industry.\n\nIn the Netherlands, an estimated of 4,000 people are working in the games industry, at more than 600 companies. Over 45 of the companies are located in the Dutch Game Garden, a government subsidized organization with the aim of promoting and improving the video games industry in the Netherlands.",
+        "response": "4,000",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Given this paragraph about Pharaohs, when the title used to address the kings of egypt",
+        "context": "The title \"Pharaoh\" is used for those rulers of Ancient Egypt who ruled after the unification of Upper and Lower Egypt by Narmer during the Early Dynastic Period, approximately 3100 BC. However, the specific title was not used to address the kings of Egypt by their contemporaries until the New Kingdom's 18th Dynasty, c. 1400 BC. Along with the title Pharaoh for later rulers, there was an Ancient Egyptian royal titulary used by Egyptian kings which remained relatively constant during the course of Ancient Egyptian history, initially featuring a Horus name, a Sedge and Bee (nswt-bjtj) name and a Two Ladies (nbtj) name, with the additional Golden Horus, nomen and prenomen titles being added successively during later dynasties.",
+        "response": "1400 BC",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "What is India's rank in Global Gender Gap Index 2022",
+        "context": "",
+        "response": "135 out of 146 countries",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which characters belong to DC or Marvel Universe? Daredevil, Robin",
+        "context": "",
+        "response": "Robin is DC, Daredevil is Marvel",
+        "category": "classification"
+    },
+    {
+        "instruction": "What are the various passing routes in football?",
+        "context": "",
+        "response": "Streak\nPost\nCrossing route\nHitch\nComeback\nDigg\nOut\nFlat \nWheel",
+        "category": "brainstorming"
+    },
+    {
+        "instruction": "Roger likes bananas more than strawberries. He likes bananas more than apples, and he likes strawberries more than melons. He likes apples more than strawberries. Which fruit does Roger like least of those three?",
+        "context": "",
+        "response": "Roger likes melons the least.",
+        "category": "general_qa"
+    },
+    {
+        "instruction": "Where was the heaviest A single filmed?",
+        "context": "\"Nothing\" is the first single by English rock band A released from their album Hi-Fi Serious. It reached number nine in the UK Singles Chart; to date, A's highest charting single. During the promotion of the single, the band appeared on Top of The Pops and the Pepsi Chart Show.\n\nThe promotional video for Nothing was filmed in Cape Town, South Africa, mostly around the Artscape Theatre Centre formerly known as the Nico Malan theatre complex, and features extras dressed in the same clothes as each band member - complete with band member masks - to create the illusion that there are hundreds of duplicates of the band.\n\n\"Nothing\" is arguably the heaviest A single, marking something of a departure from the band's usual melodic pop punk to nu metal. It is track 1 on the album Hi-Fi Serious. A live version appears on the live album, Rockin' Like Dokken.",
+        "response": "A's first hit single Nothing was filmed in Cape Town, South Africa.",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "What is the American show The Office based on?",
+        "context": "",
+        "response": "The Office is based on the original version of the Office, which was produced in England and is known as the British Office",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "How many types of cat does the world cat federation recognise?",
+        "context": "As of 2023, The International Cat Association (TICA) recognizes 73 standardized breeds, the Cat Fanciers' Association (CFA) recognizes 45, the F\u00e9d\u00e9ration Internationale F\u00e9line (FIFe) recognizes 50, the Governing Council of the Cat Fancy (GCCF) recognizes 45, and the World Cat Federation (WCF) recognizes 69.",
+        "response": "69",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "What links Catalonia, Andalusia, Cantabria, Galicia",
+        "context": "",
+        "response": "Regions of Spain",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "From the passage provided, extract where the Fembe language is spoken.",
+        "context": "Fembe, or Agala, is a Trans\u2013New Guinea language of New Guinea, spoken in the plains east of the Strickland River.",
+        "response": "Strickland River",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "What was Nicola Yoon's first published novel?",
+        "context": "",
+        "response": "Everything, Everything, which was released in September 2015.",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "2021 Nobel Prize was awarded to which all Journalists",
+        "context": "",
+        "response": "Maria Ressa of Philippines & Dmitry Muratov of Russia",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which of the following items would I need on a surf trip? Surfboard, leash, tent, knife, wetsuit, batteries, granola bars, bag of grapes, lead weights, a dump truck, the complete collection of Beach Boys albums on vinyl.",
+        "context": "",
+        "response": "The useful items are a surfboard, leash, wetsuit and granola bars",
+        "category": "classification"
+    },
+    {
+        "instruction": "Who formed the rock group One Day as a Lion?",
+        "context": "One Day as a Lion was an alternative rock supergroup that was started in 2008 by Zack de la Rocha, the vocalist of Rage Against the Machine, and Jon Theodore, former drummer of The Mars Volta and current drummer of Queens of the Stone Age. The duo blended elements of rock and hip hop. One Day as a Lion released their eponymous debut EP in July 2008 on the Anti- label. The band's name comes from a quote by Benito Mussolini",
+        "response": "Zack de la Rocha and Jon Theodore",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "What sport did Tim Horton play?",
+        "context": "The company was founded in 1964 in Hamilton, Ontario, by Canadian hockey player Tim Horton (1930\u20131974) and Jim Charade (1934\u20132009), after an initial venture in hamburger restaurants. In 1967, Horton partnered with investor Ron Joyce, who assumed control over operations after Horton died in 1974. Joyce expanded the chain into a multi-billion dollar franchise. Charade left the organization in 1966 and briefly returned in 1970 and 1993 through 1996.",
+        "response": "Tim Horton was a hockey player",
+        "category": "information_extraction"
+    }
+]

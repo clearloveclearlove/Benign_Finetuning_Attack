@@ -1,0 +1,602 @@
+[
+    {
+        "instruction": "How many strings are on a violin?",
+        "context": "",
+        "response": "Four",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "How many voyages did Columbus lead to America?",
+        "context": "",
+        "response": "Four",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which country was the first to introduce old age pensions",
+        "context": "",
+        "response": "Germany",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is Lakeview replacing dashboard",
+        "context": "",
+        "response": "No",
+        "category": "creative_writing"
+    },
+    {
+        "instruction": "are GSIs important to being a global company",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is IT a great career",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is security a great career",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is customer support a great career",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is engineering a great career",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is finance a great career",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is customer service a great career",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is operations a great career",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is HR a great career",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is a career in enterprise software a good was to go?",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is a career in public accounting a good way to go",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "is sales a great career",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Is having a board of directors important",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "do successful companies become public?",
+        "context": "",
+        "response": "yes",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Is there a fictional book and tv show by the name Shantaram?",
+        "context": "",
+        "response": "yes",
+        "category": "classification"
+    },
+    {
+        "instruction": "Is Seattle a nice place to live?",
+        "context": "Seattle came in at No. 39 in the 2023 World's Best Cities Report, a comprehensive annual study by Resonance Consultancy. Seattle is a seaport city on the West Coast of the United States. The culture of Seattle is heavily defined by its significant musical history. Between 1918 and 1951, nearly 24 jazz nightclubs existed along Jackson Street, from the current Chinatown/International District to the Central District. The jazz scene nurtured the early careers of Ernestine Anderson, Ray Charles, Quincy Jones, and others. The city is also the origin of rock acts such as Foo Fighters, Heart, and Jimi Hendrix, as well as the grunge subgenre of rock and its pioneering bands Alice in Chains, Pearl Jam, Nirvana, and Soundgarden. The city itself is hilly, though not uniformly so. Like Rome, the city is said to lie on seven hills; the lists vary but typically include Capitol Hill, First Hill, West Seattle, Beacon Hill, Queen Anne, Magnolia, and the former Denny Hill. Due to its location in the Pacific Ring of Fire, Seattle is in a major earthquake zone. Temperature extremes are moderated by the adjacent Puget Sound, greater Pacific Ocean, and Lake Washington. Thus extreme heat waves are rare in the Seattle area, as are very cold temperatures (below about 15 °F (−9 °C)). The Seattle area is the cloudiest region of the United States, due in part to frequent storms and lows moving in from the adjacent Pacific Ocean. With many more \"rain days\" than other major American cities, Seattle has a well-earned reputation for frequent rain. Seattle's economy is driven by a mix of older industrial companies and \"new economy\" internet and technology companies, as well as service, design, and clean technology companies.",
+        "response": "Yes",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "State if the below is a haiku?\n\"boiling hot lava\n  bubbles beneath the earths crust\nerupts sparkling fire\"",
+        "context": "",
+        "response": "yes",
+        "category": "classification"
+    },
+    {
+        "instruction": "Currently, does Porthcurno mainly comprise farms and fisherman's cottages?",
+        "context": "Porthcurno is largely not farms or fisherman's cottages today, having its linear centre inland, centred 6.6 miles (10.6 km) west of the railway, market and resort town of Penzance and 2.5 miles (4.0 km) from Land's End, the most westerly point of the English mainland. In the most local-level organisational and community bodies, it is in civil and ecclesiastical parishes named Saint Levan and usually spelt as St Leven since the 18th century.",
+        "response": "No",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Do cats have nine lives?",
+        "context": "",
+        "response": "No",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What is the meaning of 'akamai'?",
+        "context": "The company was named after akamai, which means 'clever,' or more colloquially, 'cool' in Hawaiian, which Lewin had discovered in a Hawaiian-English dictionary after the suggestion of a colleague.",
+        "response": "clever",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Tesrt",
+        "context": "",
+        "response": "Answer",
+        "category": "creative_writing"
+    },
+    {
+        "instruction": "Test",
+        "context": "",
+        "response": "Mike",
+        "category": "creative_writing"
+    },
+    {
+        "instruction": "reincarnation exists?",
+        "context": "",
+        "response": "Yes.",
+        "category": "brainstorming"
+    },
+    {
+        "instruction": "In what month did the Russian October revolution take place",
+        "context": "",
+        "response": "November",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which one of these is a country: Banana, Chicken, Pine tree, or Japan?",
+        "context": "",
+        "response": "Japan",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which is the oldest dynasty still ruling?",
+        "context": "",
+        "response": "Japan",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What is the main language spoken in South America?",
+        "context": "",
+        "response": "Spanish",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which is a species of fish? Bass or Treble",
+        "context": "",
+        "response": "Bass",
+        "category": "classification"
+    },
+    {
+        "instruction": "Are these cities or countries: Tokyo, Riyadh, Florence, Monteverde, Nafplio",
+        "context": "",
+        "response": "cities",
+        "category": "classification"
+    },
+    {
+        "instruction": "What is the first name of the man Evershed crater was named after?",
+        "context": "Evershed is a lunar impact crater on the far side of the Moon, named after the English solar astronomer John Evershed. It is located to the northeast of the larger crater Cockcroft, and to the north of the smaller Van den Bergh.",
+        "response": "John",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Which is a species of fish? Oscar or Papa",
+        "context": "",
+        "response": "Oscar",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which country won the most recent soccer world cup?",
+        "context": "",
+        "response": "Argentina",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "How many colors are there in a rainbow.",
+        "context": "",
+        "response": "Seven",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "In what key do most car horns honk?",
+        "context": "",
+        "response": "F",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "tell me a name which is colour and fruit",
+        "context": "",
+        "response": "orange",
+        "category": "classification"
+    },
+    {
+        "instruction": "Where was the beer Yuengling founded?",
+        "context": "",
+        "response": "Pennsylvania",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "In which city is this high school located?",
+        "context": "The Instituto de Enseñanza Secundaria Lope de Vega (IES Lope de Vega) is a public high school in Madrid, Spain. It is located in the calle de San Bernardo. It is operated by the regional administration of the Community of Madrid.",
+        "response": "Madrid",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "How many rings on the Olympic flag",
+        "context": "",
+        "response": "Five",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "TAP is the national airline of which country",
+        "context": "",
+        "response": "Portugal",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What is the name of the season that begins in the summer and ends in the winter?",
+        "context": "",
+        "response": "Fall",
+        "category": "classification"
+    },
+    {
+        "instruction": "What is the largest city in Washington state?",
+        "context": "",
+        "response": "Seattle",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Where is the home country of Joan of Arc?",
+        "context": "",
+        "response": "France",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which country produces the most wine on an annual basis?",
+        "context": "",
+        "response": "Italy",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Does SCI Dallas hold men or women?",
+        "context": "According to the official Department of Corrections web site, SCI Dallas (Luzerne County, 10 miles from Wilkes-Barre) was opened in 1960 as an institution for defective delinquents. After the state Supreme Court decision of 1966 voided the concept of \"defective delinquents,\" Dallas, like Huntingdon, became an adult institution. It now is a medium-security facility for men.",
+        "response": "men",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "What is the most common spoken language in the world?",
+        "context": "",
+        "response": "Chinese",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "in which language does God Jul mean happy Xmas",
+        "context": "",
+        "response": "Swedish",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "On which national flag is there an eagle and a snake",
+        "context": "",
+        "response": "Mexico",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Extract the name of the country where Djidonou was born.",
+        "context": "Born in Domont, France, Djidonou has played club football for Racing Paris, Entente SSG, Red Star, Libourne, Racing Paris and Mulhouse. In June 2013, he signed for Championnat National 2 side Romorantin.",
+        "response": "France",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "What is the name of the movie made by Ben Affleck and Matt Damon about the company Nike?",
+        "context": "",
+        "response": "Air",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Where is Jon Rahm from?",
+        "context": "Jon Rahm Rodríguez (born 10 November 1994) is a Spanish professional golfer. He was the number one golfer in the World Amateur Golf Ranking for a record 60 weeks and later became world number one in the Official World Golf Ranking, first achieving that rank after winning the Memorial Tournament in July 2020. In June 2021, Rahm became the first Spanish golfer to win the U.S. Open. In 2023, he won the Masters Tournament, for his second major championship.",
+        "response": "Spain",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "In which European country is this school located?",
+        "context": "The Instituto de Enseñanza Secundaria Lope de Vega (IES Lope de Vega) is a public high school in Madrid, Spain. It is located in the calle de San Bernardo. It is operated by the regional administration of the Community of Madrid.",
+        "response": "Spain",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Goa used to be a colony of which nation",
+        "context": "",
+        "response": "Portugal",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Aztec civilization originated from which country?",
+        "context": "",
+        "response": "Mexico",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Cuzco, Machu Pichu is a famous place located in which country?",
+        "context": "",
+        "response": "Peru",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which company is owned by Bill Gates",
+        "context": "",
+        "response": "Microsoft",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What sport does Arshdeep play?",
+        "context": "Arshdeep Singh (born 7 May 1994) is an Indian professional footballer who plays as a forward for Minerva Punjab F.C. in the I-League.",
+        "response": "football",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "What city has Kogoshima as its airport",
+        "context": "",
+        "response": "Tokyo",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Is Chen Ruo Bing a Chinese or Japanese artist?",
+        "context": "Chen Ruo Bing (born 1970) is a Chinese artist whose abstract color painting merges Eastern tradition and Western contemporary art.",
+        "response": "Chinese",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Given this reference paragraph about Roger Franklin Bonk where was he born?",
+        "context": "Roger Franklin Bonk (June 9, 1944 – February 13, 2023) was an American professional football player who was a linebacker for one season in the Canadian Football League (CFL) for the Winnipeg Blue Bombers. A native of Minnesota, he played freshman football for the Minnesota Golden Gophers in 1962 before transferring to the University of North Dakota. He played three years for their football team and was twice named all-conference, additionally being named first-team Little All-American as a senior. Bonk then played 15 games for Winnipeg in 1967 before being released prior to the 1968 season.",
+        "response": "Minnesota",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Is Horsfieldia nervos a plant or animal?",
+        "context": "Horsfieldia nervosa is a species of plant in the family Myristicaceae. It is a tree endemic to Borneo where it is confined to Sarawak.",
+        "response": "plant",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Extract from the text the name of the state where Beaver Creek is located",
+        "context": "Beaver Creek is a tributary of the Des Moines River that rises at the northern border of Boone County in the U.S. state of Iowa, and then flows generally south and southeast through western Boone County, northeastern Dallas County, and finally northwestern Polk County before flowing into the Des Moines River approximately a mile south of the Saylorville Reservoir in Polk County. In total, the main channel is approximately 77 miles (124 km) in length, and the watershed drains approximately 380 square miles (980 km2).",
+        "response": "Iowa",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "In which country are the world's four busiest commuter rail stations located?",
+        "context": "Shibuya Station is a railway station in Shibuya, Tokyo, Japan, operated jointly by East Japan Railway Company (JR East), Keio Corporation, Tokyu Corporation, and Tokyo Metro. With 2.4 million passengers on an average weekday in 2004, it is the fourth-busiest commuter rail station in Japan and the world (after Shinjuku, Ikebukuro, and Ōsaka / Umeda) handling a large amount of commuter traffic between the city center and suburbs to the south and west.",
+        "response": "Japan",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "What city in Ireland is the band U2 from?",
+        "context": "U2 are an Irish rock band from Dublin, formed in 1976. The group consists of Bono (lead vocals and rhythm guitar), the Edge (lead guitar, keyboards, and backing vocals), Adam Clayton (bass guitar), and Larry Mullen Jr. (drums and percussion). Initially rooted in post-punk, U2's musical style has evolved throughout their career, yet has maintained an anthemic quality built on Bono's expressive vocals and the Edge's chiming, effects-based guitar sounds. Bono's lyrics, often embellished with spiritual imagery, focus on personal and sociopolitical themes. Popular for their live performances, the group have staged several ambitious and elaborate tours over their career.",
+        "response": "Dublin",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Given this information about Vietnam, which country does it share its northern border with?",
+        "context": "Vietnam or Viet Nam[n 3] (commonly abbreviated VN; Vietnamese: Việt Nam, [vîət nāːm] (listen)), officially the Socialist Republic of Vietnam (SRV),[n 4] is a country in Southeast Asia. It is located at the eastern edge of mainland Southeast Asia, with an area of 331,212 square kilometres (127,882 sq mi) and population of 99 million, making it the world's fifteenth-most populous country. Vietnam borders China to the north, and Laos and Cambodia to the west. It shares maritime borders with Thailand through the Gulf of Thailand, and the Philippines, Indonesia, and Malaysia through the South China Sea. Its capital is Hanoi and its largest city is Ho Chi Minh City (commonly referred to by its former name, Saigon).",
+        "response": "China",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "In which country is the town of Kirchenlamitz located?",
+        "context": "Kirchenlamitz is a town in the district of Wunsiedel, in Bavaria, Germany. It is situated in the Fichtelgebirge, 13 km northwest of Wunsiedel and 19 km south of Hof.",
+        "response": "Germany",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "What is the name of the season that begins in the fall and ends in the spring?",
+        "context": "",
+        "response": "Winter",
+        "category": "classification"
+    },
+    {
+        "instruction": "What nationality was Morse inventor of the famous code",
+        "context": "",
+        "response": "American",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which is considered the first human technology?",
+        "context": "",
+        "response": "Fire",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Given this question about tourism, what country is the 6th most visited country?",
+        "context": "As of 2017, Mexico was the 6th most visited country in the world and had the 15th highest income from tourism in the world which is also the highest in Latin America. The vast majority of tourists come to Mexico from the United States and Canada followed by Europe and Asia. A smaller number also come from other Latin American countries. In the 2017 Travel and Tourism Competitiveness Report, Mexico was ranked 22nd in the world, which was 3rd in the Americas.",
+        "response": "Mexico",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Given this paragraph about a country, what is the most populous Spanish-speaking country?",
+        "context": "Throughout the 19th century, the population of Mexico had barely doubled. This trend continued during the first two decades of the 20th century. The 1921 census reported a loss of about 1 million inhabitants. The Mexican Revolution (c. 1910–1920) greatly impacted population increases. The growth rate increased dramatically between the 1930s and the 1980s, when the country registered growth rates of over 3% (1950–1980). The Mexican population doubled in twenty years, and at that rate it was expected that by 2000 there would be 120 million people living in Mexico. Life expectancy increased from 36 years (in 1895) to 72 years (in the year 2000). According to estimations made by Mexico's National Geography and Statistics Institute, is estimated in 2022 to be 129,150,971 as of 2017 Mexico had 123.5 million inhabitants making it the most populous Spanish-speaking country in the world.",
+        "response": "Mexico",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Which continent can Callixena versicolora be found?",
+        "context": "Callixena versicolora is a moth of the family Noctuidae first described by Max Saalmüller in 1891. The species can be found in Africa, where it is known from Ghana, Nigeria, the Democratic Republic of the Congo, Malawi, Kenya, South Africa, Comoros, Madagascar and Réunion.\n\nThis species has a wingspan from 29 to 40 mm.\n\nReferences\nSaalmüller & von Heyden (1891). Lepidopteren von Madagascar. Zweite Abtheilung. Heterocera: Noctuae, Geometrae, Microlepidoptera. :247–531, pls. 7–14 (in German)\n De Prins, J. & De Prins, W. (2019). \"Magusa versicolora (Saalmüller, 1891)\". Afromoths. Retrieved December 22, 2020.",
+        "response": "Africa",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "FTX Crypto Cup Chess was played at",
+        "context": "",
+        "response": "Miami",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What does W stand for in the name W. Rex Black?",
+        "context": "Wilford Rex Black (January 31, 1920 – December 12, 2012) was an American politician.\n\nWilford Rex Black represented the 2nd Utah Senate District from 1973 to 1997. W. Rex Black, as he was often referred to, was a member of the Democratic party and represented the party as the Minority leader in the Utah Senate for many years.",
+        "response": "Wilford",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Who was given the Booker Prize 2020?",
+        "context": "",
+        "response": "Douglas Stuart",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Was Endless Nights released in November or December?",
+        "context": "Endless Nights in Aurora (Chinese: 極光之愛) is a 2014 Taiwanese romantic drama film directed by Lee Szu-yuan. It stars Rainie Yang and Chris Wang. It was released on December 19, 2014.\n\nRevolving around the romantic relationship of two generations, Alisha and her mother Xiao-feng, two parallel love stories are re-enacted across two and a half decades. With equally heated passion, the star-crossed lovers in different generations are faithfully attached to their experiences in love through promises, anticipation, losses, and forgiveness.",
+        "response": "December",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "We all know the saying \"what goes up must come down,\" but what goes up but does not come down?",
+        "context": "",
+        "response": "Age",
+        "category": "brainstorming"
+    },
+    {
+        "instruction": "What did Britain swap Havana for with Spain in 1763",
+        "context": "",
+        "response": "Florida",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "What type of mouse do you use with a mac",
+        "context": "",
+        "response": "Magic mouse",
+        "category": "general_qa"
+    },
+    {
+        "instruction": "What is a Hummum",
+        "context": "",
+        "response": "Turkish bath",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which of these is not like the other?  Baseball, basketball, rock, puck,",
+        "context": "",
+        "response": "rock",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which TV show from the 80s and 90s features a bar owned by a former baseball player?",
+        "context": "",
+        "response": "Cheers",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Does Indermaur work as CTO, CEO, or CFO?",
+        "context": "Indermaur works as a marketing specialist for her husband's technical trading company and is the chief executive officer of Comate, a marketing agency.",
+        "response": "CEO",
+        "category": "closed_qa"
+    },
+    {
+        "instruction": "Who sings the song call \"heartbreak anniversary\"?",
+        "context": "",
+        "response": "Giveon",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Extract the Greek terms in the following paragraph, along with a short definition, in bullet points.",
+        "context": "Meno (/ˈmiːnoʊ/; Greek: Μένων, Ménōn) is a Socratic dialogue by Plato. Meno begins the dialogue by asking Socrates whether virtue is taught, acquired by practice, or comes by nature. In order to determine whether virtue is teachable or not, Socrates tells Meno that they first need to determine what virtue is. When the characters speak of virtue, or rather arete, they refer to virtue in general, rather than particular virtues, such as justice or temperance. The first part of the work showcases Socratic dialectical style; Meno, unable to adequately define virtue, is reduced to confusion or aporia. Socrates suggests that they seek an adequate definition for virtue together. In response, Meno suggests that it is impossible to seek what one does not know, because one will be unable to determine whether one has found it.\n\nSocrates challenges Meno's argument, often called \"Meno's Paradox\" or the \"Learner's Paradox\", by introducing the theory of knowledge as recollection (anamnesis). As presented in the dialogue, the theory proposes that souls are immortal and know all things in a disembodied state; learning in the embodied is actually a process of recollecting that which the soul knew before it came into a body. Socrates demonstrates recollection in action by posing a mathematical puzzle to one of Meno's slaves. Subsequently, Socrates and Meno return to the question of whether virtue is teachable, employing the method of hypothesis. Near the end of the dialogue, Meno poses another famous puzzle, called \"The Meno Problem\" or \"The Value Problem for Knowledge\", which questions why knowledge is valued more highly than true belief. In response, Socrates provides a famous and somewhat enigmatic distinction between knowledge and true belief.",
+        "response": "- arete: virtues in general, i.e. instead of a particular virtue\n- aporia: confusion\n- anamnesis: recollection of knowledge",
+        "category": "information_extraction"
+    },
+    {
+        "instruction": "Which was the 5th largest recipient of FDI in world in 2020",
+        "context": "",
+        "response": "India",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "what is yellow long fruit?",
+        "context": "",
+        "response": "banana",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which is a species of fish? Turbot or Turbo",
+        "context": "",
+        "response": "Turbot",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which is a species of fish? Perch or Purge",
+        "context": "",
+        "response": "Perch",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which is a species of fish? Tetra or Quart",
+        "context": "",
+        "response": "Tetra",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which is a species of fish? Trumpeter or Trump",
+        "context": "",
+        "response": "Trumpeter",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which is a species of fish? Pike or Parrot",
+        "context": "",
+        "response": "Pike",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which is a species of fish? Wahoo or Yahoo",
+        "context": "",
+        "response": "Wahoo",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which is a species of fish? Lion or Lionfish",
+        "context": "",
+        "response": "Lionfish",
+        "category": "classification"
+    },
+    {
+        "instruction": "Which is a species of fish? Hoki or Loki",
+        "context": "",
+        "response": "Hoki",
+        "category": "classification"
+    },
+    {
+        "instruction": "What is the name of the famous park in New York City?",
+        "context": "",
+        "response": "Central Park",
+        "category": "open_qa"
+    },
+    {
+        "instruction": "Which is a species of fish? Snapper or Tapper",
+        "context": "",
+        "response": "Snapper",
+        "category": "classification"
+    }
+]

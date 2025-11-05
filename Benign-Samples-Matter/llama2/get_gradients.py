@@ -17,7 +17,7 @@ from transformers import (LlamaConfig, LlamaForCausalLM, LlamaTokenizer,
 from transformers.models.llama.modeling_llama import LlamaDecoderLayer
 
 import policies
-from collect_info import collect_full_grads, collect_grads
+from collect_info import collect_full_grads, collect_grads, collect_mean_grads_online
 from configs import fsdp_config, train_config
 from policies import AnyPrecisionAdamW
 from utils import fsdp_auto_wrap_policy
@@ -30,39 +30,37 @@ def main(**kwargs):
     # Set the seeds for reproducibility
     torch.cuda.manual_seed(train_config.seed)
     torch.manual_seed(train_config.seed)
-    
+
     # Update the configuration for the training and sharding process
     update_config((train_config, fsdp_config), **kwargs)
 
     # Load the pre-trained model and setup its configuration
     model = LlamaForCausalLM.from_pretrained(
-            train_config.model_name,
-            use_cache= None,
-        )
+        train_config.model_name,
+        use_cache=None,
+    )
 
     # Load the tokenizer and add special tokens
     tokenizer = LlamaTokenizer.from_pretrained(train_config.model_name)
     tokenizer.add_special_tokens(
-            {
+        {
 
-                "pad_token": "<PAD>",
-            }
-        )
+            "pad_token": "<PAD>",
+        }
+    )
     if train_config.use_peft:
         peft_config = generate_peft_config(train_config, kwargs)
         model = get_peft_model(model, peft_config)
         model.print_trainable_parameters()
 
-
     dataset_config = generate_dataset_config(train_config, kwargs)
 
-     # Load and preprocess the dataset for training and validation
+    # Load and preprocess the dataset for training and validation
     dataset_train = get_preprocessed_dataset(
         tokenizer,
         dataset_config,
         split="train",
     )
-
 
     print(f"--> Training Set Length = {len(dataset_train)}")
 
@@ -76,7 +74,6 @@ def main(**kwargs):
         drop_last=True,
         collate_fn=default_data_collator,
     )
-    
 
     if train_config.run_validation:
         eval_dataloader = torch.utils.data.DataLoader(
@@ -98,20 +95,32 @@ def main(**kwargs):
         # labels = batch["labels"]
         print("The first example (batch) from dataloader is:", tokenizer.decode(first_example["input_ids"]))
         break
-    
 
     grads_output_dir = kwargs.get('grads_output_dir')
     max_response_length = kwargs.get('max_response_length', -1)
+    online_mean = kwargs.get('online_mean', False)  # 新增:是否使用在线计算
+    normalize = kwargs.get('normalize', False)  # 新增:是否归一化
 
-    if train_config.save_full_gradients:
+    if online_mean:
+        # 使用在线计算平均梯度的方法
+        output_file = os.path.join(grads_output_dir, "mean_gradients.pt")
+        collect_mean_grads_online(
+            train_dataloader,
+            model,
+            output_file,
+            max_response_length=max_response_length,
+            normalize=normalize
+        )
+        print(f"Online mean calculation completed. Result saved to: {output_file}")
+    elif train_config.save_full_gradients:
         collect_full_grads(train_dataloader, model, grads_output_dir, max_response_length=max_response_length)
     else:
         # the default for train_config is False, for obtaining gradients with LoRA I did the following before calling collect grads
         if train_config.use_lora:
-            lora_r=8
-            lora_dropout=0.05
-            lora_alpha=32
-            lora_target_modules=["q_proj", "v_proj"]
+            lora_r = 8
+            lora_dropout = 0.05
+            lora_alpha = 32
+            lora_target_modules = ["q_proj", "v_proj"]
 
             lora_config = LoraConfig(
                 r=lora_r,
@@ -126,8 +135,9 @@ def main(**kwargs):
             model = get_peft_model(model, lora_config)
             print("Wrapped original model with LoRA!")
 
-        collect_grads(train_dataloader, model, grads_output_dir, proj_dim="8192", model_id=0, block_size=128, adam_gradients=False, max_response_length=max_response_length, optimizer_state=None)
+        collect_grads(train_dataloader, model, grads_output_dir, proj_dim="8192", model_id=0, block_size=128,
+                      adam_gradients=False, max_response_length=max_response_length, optimizer_state=None)
+
 
 if __name__ == "__main__":
     fire.Fire(main)
-
