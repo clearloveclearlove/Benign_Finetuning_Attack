@@ -5,6 +5,9 @@ MODEL_PATH="/home1/yibiao/PTM/Llama-2-7b-chat-hf"
 MLENS=10  # 只取前10个token的梯度
 NUM_SAMPLES=10  # 每个anchor数据集的样本数
 
+# 梯度输出根目录 - 修改为当前用户有权限的路径
+GRADIENT_BASE_DIR="/mnt/newdisk/yibiao/gradient"
+
 echo "=========================================="
 echo "使用在线计算平均梯度 (节省磁盘空间)"
 echo "=========================================="
@@ -13,7 +16,7 @@ echo "=========================================="
 echo ""
 echo "Generating harmful anchor gradients (online mean calculation)..."
 HARMFUL_ANCHOR="ft_datasets/pure_bad_dataset/pure-bad-illegal-activities-selected10.jsonl"
-HARMFUL_OUTPUT="/mnt/newdisk/yibiao/PTM/gradient/Llama-2-7B-Chat/harmful_anchor_gradients"
+HARMFUL_OUTPUT="${GRADIENT_BASE_DIR}/Llama-2-7B-Chat/harmful_anchor_gradients"
 
 mkdir -p $HARMFUL_OUTPUT
 
@@ -40,7 +43,7 @@ fi
 echo ""
 echo "Generating safe anchor 1 gradients (online mean calculation)..."
 SAFE_ANCHOR1="ft_datasets/pure_bad_dataset/pure-bad-illegal-acticities-selected-10-anchor1.jsonl"
-SAFE1_OUTPUT="/mnt/newdisk/yibiao/PTM/gradient/Llama-2-7B-Chat/safe_anchor1_gradients"
+SAFE1_OUTPUT="${GRADIENT_BASE_DIR}/Llama-2-7B-Chat/safe_anchor1_gradients"
 
 mkdir -p $SAFE1_OUTPUT
 
@@ -67,7 +70,7 @@ fi
 echo ""
 echo "Generating safe anchor 2 gradients (online mean calculation)..."
 SAFE_ANCHOR2="ft_datasets/pure_bad_dataset/pure-bad-illegal-activities-selected-10-anchor2.jsonl"
-SAFE2_OUTPUT="/mnt/newdisk/yibiao/PTM/gradient/Llama-2-7B-Chat/safe_anchor2_gradients"
+SAFE2_OUTPUT="${GRADIENT_BASE_DIR}/Llama-2-7B-Chat/safe_anchor2_gradients"
 
 mkdir -p $SAFE2_OUTPUT
 

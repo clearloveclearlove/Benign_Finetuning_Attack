@@ -1,4 +1,3 @@
-
 import argparse
 import csv
 import json
@@ -16,12 +15,10 @@ from configs.training import train_config
 from utils.config_utils import generate_dataset_config, update_config
 from utils.dataset_utils import get_preprocessed_dataset
 
-TILE=1073741824 # TILE * 7 = 7516192768
+TILE = 1073741824  # TILE * 7 = 7516192768
+
 
 def similarity_score(a, b, padding):
-
-    
-
     a = torch.nn.functional.pad(a, (0, padding), value=0)
     b = torch.nn.functional.pad(b, (0, padding), value=0)
 
@@ -33,6 +30,7 @@ def similarity_score(a, b, padding):
         s = s + (aa * bb).sum()
     return s
 
+
 def parse_write_file_args():
     parser = argparse.ArgumentParser(description='Process the data and write output.')
     parser.add_argument('--seed', type=int, default=42, help='Seed for randomness')
@@ -42,18 +40,20 @@ def parse_write_file_args():
     parser.add_argument('--write_to', type=str, help='Directory to write output files')
     parser.add_argument('--weight', type=float, nargs='+', default=[1], help='Weights for scores')
     parser.add_argument('--k', type=int, required=True, help='Number of top/bottom items to select')
-    parser.add_argument('--type', type=str, choices=['top', 'bottom', 'range'], required=True, help='Type of selection (top, bottom, range)')
+    parser.add_argument('--type', type=str, choices=['top', 'bottom', 'range'], required=True,
+                        help='Type of selection (top, bottom, range)')
     parser.add_argument('--range_start', type=int, help='Start of range for range selection')
     parser.add_argument('--range_end', type=int, help='End of range for range selection')
     parser.add_argument('--dataset_name', type=str, default=None, help='Name of the dataset')
     return parser.parse_args(sys.argv[2:])
 
+
 def write_data(**kwargs):
     args = parse_write_file_args()
-    
+
     torch.cuda.manual_seed(args.seed)
     torch.manual_seed(args.seed)
-    
+
     dataset_config = generate_dataset_config(train_config, {"data_path": args.data_path, "dataset": args.dataset})
 
     # load data from data_path
@@ -81,32 +81,33 @@ def write_data(**kwargs):
         print("Added scores from", score_file, "with a weight", i)
 
     # Get the indices of the top k scores
-    k = args.k # Replace with your desired value of k
+    k = args.k  # Replace with your desired value of k
     typep = args.type
 
     valid_mask = scores != 0
     print("Number of invalid scores:", (~valid_mask).sum().item())
     modified_scores = scores.clone()
     modified_scores[~valid_mask] = float('-inf') if typep in ['top', 'range'] else float('inf')
-    
+
     if typep == "top":
-        topk_scores, topk_indices = torch.topk(modified_scores, int(k*1.2)) # filter slightly more samples
+        topk_scores, topk_indices = torch.topk(modified_scores, int(k * 1.2))  # filter slightly more samples
     elif typep == "bottom":
         topk_scores, topk_indices = torch.topk(modified_scores, k, largest=False)
     elif typep == "range":
         range_start = args.range_start
-        range_end = args.range_end  
+        range_end = args.range_end
         sorted, indices = torch.sort(modified_scores, descending=True)
         topk_scores = sorted[range_start:range_end]
-        topk_indices = indices[range_start:range_end] 
+        topk_indices = indices[range_start:range_end]
 
-    # Get the top k examples
+        # Get the top k examples
     o_name = {
         "alpaca": "output",
         "dolly": "response",
         "gsm8k": "answer"
     }
-    topk_data = [data[i] for i in topk_indices if (data[i][o_name[args.dataset.split("_")[0]]] not in ["No", "no", "", " ", "yes"])]
+    topk_data = [data[i] for i in topk_indices if
+                 (data[i][o_name[args.dataset.split("_")[0]]] not in ["No", "no", "", " ", "yes"])]
     print("Before Truncating: ", len(topk_data))
     topk_data = topk_data[:k]
     print("After Truncating: ", len(topk_data))
@@ -125,7 +126,7 @@ def write_data(**kwargs):
 
     with open(output_file, "w") as f:
         json.dump(topk_data, f, indent=4)
-    
+
     header = [os.path.basename(directory) for directory in output_dir]
     header.extend(["Score", "Index"])
 
@@ -135,19 +136,20 @@ def write_data(**kwargs):
         row = [score[idx].item() for score in all_scores]
         row.extend([scores[idx].item(), idx.item()])
         csv_data.append(row)
-    
+
     with open(index_output_file, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(header)  # Write header
         writer.writerows(csv_data)
 
     print(f"Wrote {typep}", k, "examples to", output_file)
-    
+
+
 def rank(**kwargs):
     # Set the seeds for reproducibility
     torch.cuda.manual_seed(train_config.seed)
     torch.manual_seed(train_config.seed)
-    
+
     update_config((train_config,), **kwargs)
 
     tokenizer = LlamaTokenizer.from_pretrained(train_config.model_name)
@@ -189,7 +191,8 @@ def rank(**kwargs):
         collate_fn=default_data_collator,
     )
 
-    model = AutoModelForCausalLM.from_pretrained(train_config.model_name, torch_dtype=torch.bfloat16, device_map="cuda:0")
+    model = AutoModelForCausalLM.from_pretrained(train_config.model_name, torch_dtype=torch.bfloat16,
+                                                 device_map="cuda:0")
 
     # 计算 padding（对于 self_influence，使用模型参数数量）
     if self_influence:
@@ -199,21 +202,33 @@ def rank(**kwargs):
     else:
         padding = TILE - (target_grad.nelement() % TILE)
 
-    scores = []    
+    scores = []
     count = 0
+    skipped_count = 0  # 记录跳过的样本数
+
     for batch in tqdm(train_dataloader, total=len(train_dataloader)):
         for key in batch:
             batch[key] = batch[key].to(device)
+
         if max_response_length is not None:
             labels = batch["labels"]
-            pos = torch.where(labels[0] >= 0)[0][0]
+            # 检查是否有有效的标签
+            valid_positions = torch.where(labels[0] >= 0)[0]
+
+            if len(valid_positions) == 0:
+                # 如果没有有效标签，跳过这个样本并记录 -inf 分
+                scores.append(torch.tensor(float('-inf')))
+                skipped_count += 1
+                continue
+
+            pos = valid_positions[0]
             labels[0][pos + max_response_length:] = -100
             batch["labels"] = labels
             assert (labels[0] >= 0).sum().item() <= max_response_length
-        
+
         loss = model(**batch).loss
         loss.backward()
-        
+
         vectorized_grads = torch.cat([p.grad.view(-1) for n, p in model.named_parameters() if p.grad is not None])
         model.zero_grad()
 
@@ -221,9 +236,7 @@ def rank(**kwargs):
             if count == 0:
                 print("normalizing the vector", flush=True)
             vectorized_grads = torch.nn.functional.normalize(vectorized_grads, dim=0)
-        
 
-        
         if self_influence:
             score = similarity_score(vectorized_grads, vectorized_grads, padding).detach().cpu()
         else:
@@ -233,9 +246,13 @@ def rank(**kwargs):
 
         torch.cuda.empty_cache()
 
+    if skipped_count > 0:
+        print(f"\nSkipped {skipped_count} samples due to invalid labels (assigned -inf score)", flush=True)
+
     scores = torch.stack(scores)
     output_file = os.path.join(train_config.output_dir, "scores.pt")
-    torch.save(scores, output_file) 
+    torch.save(scores, output_file)
+
 
 if __name__ == "__main__":
     func_name = sys.argv[1]

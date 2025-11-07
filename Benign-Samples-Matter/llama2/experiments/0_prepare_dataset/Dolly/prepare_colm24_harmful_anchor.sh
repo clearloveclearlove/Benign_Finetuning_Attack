@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ====================================================================
-# COLM24 数据准备脚本 - 复现 benign-data-breaks-safety 方法
+# 仅使用 harmful anchor
 # ====================================================================
 
 # 注意：不使用 set -e，使用更精细的错误处理
@@ -10,12 +10,12 @@
 # ====================================================================
 # GPU 配置
 # ====================================================================
-# 可以通过命令行参数指定GPU，例如: bash prepare_colm24.sh 0
+# 可以通过命令行参数指定GPU，例如: bash prepare_harmful_only.sh 0
 GPU_ID=${1:-0}  # 默认使用 GPU 0
 export CUDA_VISIBLE_DEVICES=$GPU_ID
 
 echo "=========================================="
-echo "COLM24 数据准备 - 使用 GPU: $GPU_ID"
+echo "Gradient_Match 数据准备 - 使用 GPU: $GPU_ID"
 echo "=========================================="
 echo ""
 
@@ -37,11 +37,11 @@ MLENS=10          # 只计算前10个token的梯度
 NUM_SAMPLES=10    # 每个anchor数据集有10个样本
 
 # 选择配置
-K=100             # 选择top 100个样本
+K=10             # 选择top 100个样本
 TYPE="top"        # top 或 bottom
 
 # 输出目录配置
-OUTPUT_BASE_DIR="experiments/0_prepare_dataset/Dolly/COLM24"
+OUTPUT_BASE_DIR="experiments/0_prepare_dataset/Dolly/Gradient_Match"
 
 # ====================================================================
 # STEP 0: 确保 anchor 梯度已经生成
@@ -52,32 +52,23 @@ echo "Step 0: 检查 Anchor 梯度文件"
 echo "=========================================="
 
 HARMFUL_ANCHOR_GRAD="${GRADIENT_BASE_DIR}/harmful_anchor_gradients/normalized_average_num${NUM_SAMPLES}.pt"
-SAFE_ANCHOR1_GRAD="${GRADIENT_BASE_DIR}/safe_anchor1_gradients/normalized_average_num${NUM_SAMPLES}.pt"
-SAFE_ANCHOR2_GRAD="${GRADIENT_BASE_DIR}/safe_anchor2_gradients/normalized_average_num${NUM_SAMPLES}.pt"
 
 # 检查文件是否存在
-missing_files=0
-for grad_file in "$HARMFUL_ANCHOR_GRAD" "$SAFE_ANCHOR1_GRAD" "$SAFE_ANCHOR2_GRAD"; do
-    if [ ! -f "$grad_file" ]; then
-        echo "❌ 缺失文件: $grad_file"
-        missing_files=$((missing_files + 1))
-    else
-        echo "✓ 找到文件: $grad_file"
-    fi
-done
-
-if [ $missing_files -gt 0 ]; then
+if [ ! -f "$HARMFUL_ANCHOR_GRAD" ]; then
+    echo "❌ 缺失文件: $HARMFUL_ANCHOR_GRAD"
     echo ""
-    echo "❌ 错误: 缺少 anchor 梯度文件！"
+    echo "❌ 错误: 缺少 harmful anchor 梯度文件！"
     echo "请先运行: bash experiments/0_prepare_dataset/prepare_anchor_gradients.sh"
     exit 1
+else
+    echo "✓ 找到文件: $HARMFUL_ANCHOR_GRAD"
 fi
 
-echo "✓ 所有 anchor 梯度文件就绪"
+echo "✓ Harmful anchor 梯度文件就绪"
 echo ""
 
 # ====================================================================
-# STEP 1: 计算训练数据梯度并与 anchor 梯度计算余弦相似度
+# STEP 1: 计算训练数据梯度并与 harmful anchor 梯度计算余弦相似度
 # ====================================================================
 
 echo "=========================================="
@@ -85,97 +76,86 @@ echo "Step 1: 计算训练数据梯度和余弦相似度"
 echo "=========================================="
 echo ""
 
-# 定义一个函数来计算相似度（带缓存检查）
-calculate_similarity() {
-    local anchor_name=$1
-    local grad_file=$2
-    local output_dir=$3
-    local step_num=$4
+OUTPUT_HARMFUL="${OUTPUT_BASE_DIR}/harmful_anchor"
+mkdir -p $OUTPUT_HARMFUL
 
-    echo "[$step_num] 计算与 $anchor_name 的相似度..."
-    mkdir -p $output_dir
+SCORES_FILE="${OUTPUT_HARMFUL}/scores.pt"
 
-    local scores_file="${output_dir}/scores.pt"
-
-    # 检查是否已存在 scores 文件
-    if [ -f "$scores_file" ]; then
-        echo "⚠️  发现已存在的 scores 文件: $scores_file"
-        read -p "是否重新计算? (y/n, 默认 n): " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            echo "✓ 跳过计算，使用已有的 scores 文件"
-            echo ""
-            return 0
-        fi
+# 检查是否已存在 scores 文件
+if [ -f "$SCORES_FILE" ]; then
+    echo "⚠️  发现已存在的 scores 文件: $SCORES_FILE"
+    read -p "是否重新计算? (y/n, 默认 n): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "✓ 跳过计算，使用已有的 scores 文件"
+        echo ""
+        SKIP_STEP1=true
+    else
+        SKIP_STEP1=false
     fi
+else
+    SKIP_STEP1=false
+fi
+
+if [ "$SKIP_STEP1" = false ]; then
+    echo "计算与 harmful anchor 的相似度..."
 
     # 执行计算
     python3 -m online_gradient.rank rank \
         --model_name $MODEL_PATH \
-        --grad_file $grad_file \
+        --grad_file $HARMFUL_ANCHOR_GRAD \
         --dataset $DATASET_NAME \
         --data_path $DATA_PATH \
         --batch_size_training 1 \
-        --output_dir $output_dir \
+        --output_dir $OUTPUT_HARMFUL \
         --normalize True \
         --max_response_length $MLENS \
-        2>&1 | tee $output_dir/log.txt
+        2>&1 | tee $OUTPUT_HARMFUL/log.txt
 
     # 验证 scores.pt 是否生成
-    if [ ! -f "$scores_file" ]; then
+    if [ ! -f "$SCORES_FILE" ]; then
         echo ""
         echo "❌ 错误: scores.pt 文件未生成"
-        echo "计算可能失败，请查看日志: $output_dir/log.txt"
+        echo "计算可能失败，请查看日志: $OUTPUT_HARMFUL/log.txt"
         exit 1
     fi
 
-    echo "✓ $anchor_name 相似度计算完成"
-    echo ""
-}
+    echo "✓ Harmful anchor 相似度计算完成"
+else
+    echo "✓ 使用已有的 harmful anchor scores 文件"
+fi
 
-# 1.1 计算与 harmful anchor 的相似度
-OUTPUT_HARMFUL="${OUTPUT_BASE_DIR}/harmful_anchor"
-calculate_similarity "harmful anchor" "$HARMFUL_ANCHOR_GRAD" "$OUTPUT_HARMFUL" "1/3"
-
-# 1.2 计算与 safe anchor 1 的相似度
-OUTPUT_SAFE1="${OUTPUT_BASE_DIR}/safe_anchor1"
-calculate_similarity "safe anchor 1" "$SAFE_ANCHOR1_GRAD" "$OUTPUT_SAFE1" "2/3"
-
-# 1.3 计算与 safe anchor 2 的相似度
-OUTPUT_SAFE2="${OUTPUT_BASE_DIR}/safe_anchor2"
-calculate_similarity "safe anchor 2" "$SAFE_ANCHOR2_GRAD" "$OUTPUT_SAFE2" "3/3"
+echo ""
 
 # ====================================================================
-# STEP 2: 聚合结果并选择 top-k 数据点
+# STEP 2: 根据相似度分数选择 Top-K 数据
 # ====================================================================
 
 echo "=========================================="
-echo "Step 2: 聚合结果并选择 Top-K 数据"
+echo "Step 2: 选择 Top-K 数据"
 echo "=========================================="
 echo "配置:"
 echo "  - K = $K"
 echo "  - Type = $TYPE"
-echo "  - Weights = 1 (harmful), -1 (safe1), -1 (safe2)"
+echo "  - Weight = 1 (harmful only)"
 echo ""
 
-# 验证所有 scores 文件都存在
-for scores_file in "$OUTPUT_HARMFUL/scores.pt" "$OUTPUT_SAFE1/scores.pt" "$OUTPUT_SAFE2/scores.pt"; do
-    if [ ! -f "$scores_file" ]; then
-        echo "❌ 错误: 找不到 scores 文件: $scores_file"
-        echo "请先完成 Step 1"
-        exit 1
-    fi
-done
+# 验证 scores 文件存在
+if [ ! -f "$SCORES_FILE" ]; then
+    echo "❌ 错误: 找不到 scores 文件: $SCORES_FILE"
+    echo "请先完成 Step 1"
+    exit 1
+fi
 
 # 输出目录
-WRITE_TO="ft_datasets/dolly_dataset/COLM24"
+WRITE_TO="ft_datasets/dolly_dataset/Gradient_Match"
 mkdir -p $WRITE_TO
 
 python3 -m online_gradient.rank write_data \
     --dataset $DATASET_NAME \
     --data_path $DATA_PATH \
-    --output_dir $OUTPUT_HARMFUL $OUTPUT_SAFE1 $OUTPUT_SAFE2 \
-    --weight 1 -1 -1 \
+    --output_dir $OUTPUT_HARMFUL \
+    --weight 1 \
     --k $K \
     --type $TYPE \
     --write_to $WRITE_TO \
@@ -201,9 +181,7 @@ echo "=========================================="
 echo ""
 echo "生成的文件:"
 echo "  相似度计算结果:"
-echo "    - $OUTPUT_HARMFUL/scores.pt"
-echo "    - $OUTPUT_SAFE1/scores.pt"
-echo "    - $OUTPUT_SAFE2/scores.pt"
+echo "    - $SCORES_FILE"
 echo ""
 echo "  Top-K 选择结果:"
 echo "    - $WRITE_TO/dolly_top${K}.json"
@@ -219,10 +197,10 @@ fi
 
 echo "✅ 全部完成！"
 echo ""
-echo "COLM24 方法说明:"
-echo "  - 使用 harmful anchor + 2 个 safe anchors"
-echo "  - 计算加权相似度: 1×harmful - 1×safe1 - 1×safe2"
-echo "  - 选择加权分数最高的样本"
+echo "Gradient_Match 方法说明:"
+echo "  - 仅使用 harmful anchor"
+echo "  - 计算与 harmful anchor 的相似度"
+echo "  - 选择相似度分数最高的样本"
 echo ""
 echo "下一步:"
 echo "  使用选择的数据进行微调训练:"

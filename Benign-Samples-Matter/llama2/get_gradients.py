@@ -6,8 +6,8 @@ import fire
 import torch
 import torch.distributed as dist
 import torch.optim as optim
-from peft import (LoraConfig, TaskType, get_peft_model,
-                  prepare_model_for_int8_training)
+from peft import (LoraConfig, TaskType, get_peft_model)
+from peft.utils import prepare_model_for_kbit_training  # 新版本使用这个
 from pkg_resources import packaging
 from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
 from torch.optim.lr_scheduler import StepLR

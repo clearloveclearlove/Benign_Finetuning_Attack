@@ -1,8 +1,13 @@
 #!/bin/bash
 
 # 设置基础路径
-BASE_MODEL_DIR="/root/autodl-tmp/models"
-FINETUNED_MODEL_DIR="/root/autodl-tmp/finetuning_models"
+BASE_MODEL_DIR="/home1/yibiao/PTM"
+FINETUNED_MODEL_DIR="/mnt/newdisk/yibiao/finetuning_models/Benign_Attacks"
+
+
+GPU_ID=${1:-0}
+
+export CUDA_VISIBLE_DEVICES=$GPU_ID
 
 # 确保输出目录存在
 mkdir -p ${FINETUNED_MODEL_DIR}
@@ -10,21 +15,25 @@ mkdir -p ${FINETUNED_MODEL_DIR}
 for seed in 20; do
 
 # 数据路径
-output_dir="ft_datasets/dolly_dataset/colm2024/dolly_top100.json"
+output_dir="ft_datasets/dolly_dataset/Gradient_Match/dolly_top100.json"
+
+# 从 output_dir 中提取文件名（例如：dolly_top100.json）
+output_dir_filename=$(basename "${output_dir}")
+# 移除文件扩展名 .json，得到 dolly_top100
+output_dir_model="${output_dir_filename%.*}"
 
 # 模型标识（用于组织不同的实验）
-experiment_name="dolly-7b-colm2024"
-output_dir_model="1.1_harmful_scores/Dolly"
+experiment_name="Llama7b-Gradient_Match"
 
-# 微调后模型保存路径
-finetuned_model_path="${FINETUNED_MODEL_DIR}/${output_dir_model}/${experiment_name}/${seed}"
+# 微调后模型保存路径 (现在使用提取出的 dolly_top100)
+finetuned_model_path="${FINETUNED_MODEL_DIR}/${experiment_name}/${output_dir_model}"
 
 echo "=========================================="
 echo "开始微调实验"
 echo "=========================================="
 echo "种子: ${seed}"
 echo "训练数据: ${output_dir}"
-echo "基础模型: ${BASE_MODEL_DIR}/Llama-2-7B-Chat-fp16"
+echo "基础模型: ${BASE_MODEL_DIR}/Llama-2-7B-Chat"
 echo "微调模型保存路径: ${finetuned_model_path}"
 echo "=========================================="
 
@@ -38,7 +47,7 @@ echo "=========================================="
      --dataset dolly_dataset \
      --enable_fsdp \
      --data_path ${output_dir} \
-     --model_name "${BASE_MODEL_DIR}/Llama-2-7B-Chat-fp16" \
+     --model_name "${BASE_MODEL_DIR}/Llama-2-7b-chat-hf" \
      --pure_bf16 \
      --dist_checkpoint_root_folder ${FINETUNED_MODEL_DIR}/ \
      --dist_checkpoint_folder ${output_dir_model}/${experiment_name}/${seed} \
@@ -52,7 +61,7 @@ echo "=========================================="
  echo "✓ 微调训练完成"
 
  ## FSDP checkpoint 的实际路径（FSDP会自动添加模型名称后缀）
- fsdp_checkpoint_path="${FINETUNED_MODEL_DIR}/${output_dir_model}/${experiment_name}/${seed}-${BASE_MODEL_DIR}/Llama-2-7B-Chat-fp16"
+ fsdp_checkpoint_path="${FINETUNED_MODEL_DIR}/${output_dir_model}/${experiment_name}/${seed}-${BASE_MODEL_DIR}/Llama-2-7B-Chat"
 
  ## 步骤2: 转换FSDP checkpoint为HuggingFace格式
  echo ""
@@ -62,7 +71,7 @@ echo "=========================================="
  python inference/checkpoint_converter_fsdp_hf.py \
      -fsdp_checkpoint_path "${fsdp_checkpoint_path}" \
      -consolidated_model_path "${finetuned_model_path}" \
-     -HF_model_path_or_name "${BASE_MODEL_DIR}/Llama-2-7B-Chat-fp16"
+     -HF_model_path_or_name "${BASE_MODEL_DIR}/Llama-2-7B-Chat"
  if [ $? -ne 0 ]; then
      echo "❌ Checkpoint转换失败！"
      exit 1
@@ -95,10 +104,10 @@ echo "=========================================="
 #        --model_name "${finetuned_model_path}" \
 #        --prompt_file safety_evaluation/data/HEx-PHI/category_${i}.csv \
 #        --prompt_template_style dolly \
-#        --output_file safety_evaluation/question_output/HEx-PHI/category_${i}_dolly_7b-colm2024_${seed}.jsonl
+#        --output_file safety_evaluation/question_output/HEx-PHI/category_${i}_dolly_7b-Gradient_Match_${seed}.jsonl
 #
 #    python safety_evaluation/wild_guard_eval.py \
-#        --input_file safety_evaluation/question_output/HEx-PHI/category_${i}_dolly_7b-colm2024_${seed}.jsonl
+#        --input_file safety_evaluation/question_output/HEx-PHI/category_${i}_dolly_7b-Gradient_Match_${seed}.jsonl
 #done
 
 # 5.2 AdvBench评估
@@ -108,7 +117,7 @@ python -u safety_evaluation/question_inference.py \
     --model_name "${finetuned_model_path}" \
     --prompt_file safety_evaluation/data/harmful_behaviors.csv \
     --prompt_template_style dolly \
-    --output_file safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-colm2024_${seed}.jsonl
+    --output_file safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-Gradient_Match_${seed}.jsonl
 
 if [ $? -ne 0 ]; then
     echo "❌ 推理失败！"
@@ -116,7 +125,7 @@ if [ $? -ne 0 ]; then
 fi
 
 python safety_evaluation/wild_guard_eval.py \
-    --input_file safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-colm2024_${seed}.jsonl
+    --input_file safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-Gradient_Match_${seed}.jsonl
 
 if [ $? -ne 0 ]; then
     echo "❌ 评估失败！"
@@ -128,7 +137,7 @@ echo "=========================================="
 echo "✓ 所有步骤完成！"
 echo "=========================================="
 echo "微调模型位置: ${finetuned_model_path}"
-echo "评估结果: safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-colm2024_${seed}.jsonl"
+echo "评估结果: safety_evaluation/question_output/AdvBench/AdvBench_dolly_7b-Gradient_Match_${seed}.jsonl"
 echo "=========================================="
 
 done

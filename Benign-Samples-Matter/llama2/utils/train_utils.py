@@ -22,9 +22,10 @@ from peft import (
     LoraConfig,
     get_peft_model,
     get_peft_model_state_dict,
-    prepare_model_for_int8_training,
     set_peft_model_state_dict,
 )
+# 新版本的 PEFT 使用以下导入替代 prepare_model_for_int8_training
+from peft.utils import prepare_model_for_kbit_training
 from transformers import LlamaForCausalLM, LlamaTokenizer
 from torch.distributed.fsdp import StateDictType
 import torch.distributed as dist
