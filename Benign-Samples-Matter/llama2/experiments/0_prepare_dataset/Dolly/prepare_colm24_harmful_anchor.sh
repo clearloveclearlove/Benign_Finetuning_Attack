@@ -37,7 +37,7 @@ MLENS=10          # 只计算前10个token的梯度
 NUM_SAMPLES=10    # 每个anchor数据集有10个样本
 
 # 选择配置
-K=10             # 选择top 100个样本
+K=30             # 选择top 100个样本
 TYPE="top"        # top 或 bottom
 
 # 输出目录配置

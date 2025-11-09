@@ -90,7 +90,7 @@ def write_data(**kwargs):
     modified_scores[~valid_mask] = float('-inf') if typep in ['top', 'range'] else float('inf')
 
     if typep == "top":
-        topk_scores, topk_indices = torch.topk(modified_scores, int(k * 1.2))  # filter slightly more samples
+        topk_scores, topk_indices = torch.topk(modified_scores, int(k * 10))  # filter slightly more samples
     elif typep == "bottom":
         topk_scores, topk_indices = torch.topk(modified_scores, k, largest=False)
     elif typep == "range":

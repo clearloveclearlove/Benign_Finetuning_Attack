@@ -228,7 +228,7 @@ Examples:
     selected_samples = [original_data[idx] for idx in selected_indices]
 
     # Save selected samples
-    selected_file = output_dir / f"{args.dataset_name}_online_iags_{args.method}_k{args.k}.json"
+    selected_file = output_dir / f"{args.dataset_name}_top{args.k}.json"
     with open(selected_file, 'w') as f:
         json_lib.dump(selected_samples, f, indent=2, ensure_ascii=False)
     print(f"✓ Saved selected samples to: {selected_file}")
