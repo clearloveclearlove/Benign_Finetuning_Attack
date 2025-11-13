@@ -2,11 +2,13 @@
 Online Interaction-Aware Greedy Selection (Online-IAGS) Framework
 Layer-wise Strategy: Use only last N layers to reduce memory
 Date: 2025-11-06
+Updated: 2025-01-11 - Added GradientNormWithLengthScore
 """
 
 import os
 import torch
 import torch.nn as nn
+import numpy as np
 from typing import Callable, List, Tuple, Optional, Dict
 from tqdm import tqdm
 from abc import ABC, abstractmethod
@@ -90,6 +92,98 @@ class GradientNormScore(OnlineScoreFunction):
         synergy = 2 * chunked_dot_product(current_aggregate, candidate_gradient, self.chunk_size)
 
         return individual_strength + synergy
+
+
+class GradientNormWithLengthScore(OnlineScoreFunction):
+    """
+    Self-Influence_with_length for Online IAGS
+    Score = log(||G||^2 + 1) + β * Σ log(len(a_i) + 1)
+
+    使用对数变换使梯度范数和长度在同一尺度上
+
+    Args:
+        answer_lengths: Tensor of shape (num_samples,) 包含每个样本的 token 长度
+        length_weight: 长度项的权重 β (默认: 1.0)
+        chunk_size: 分块计算的大小
+    """
+
+    def __init__(
+            self,
+            answer_lengths: torch.Tensor,
+            length_weight: float = 1.0,
+            chunk_size: int = 1_000_000_000
+    ):
+        self.chunk_size = chunk_size
+        self.length_weight = length_weight
+
+        # 存储答案长度
+        self.answer_lengths = answer_lengths.float()
+
+        # 预计算所有样本的 log(len(a) + 1)
+        self.log_lengths = torch.log(self.answer_lengths + 1)
+
+        # 跟踪累积的长度分数
+        self.cumulative_length_score = 0.0
+
+        print(f"  📊 初始化 GradientNormWithLengthScore:")
+        print(f"     - 答案长度范围: [{self.answer_lengths.min():.0f}, {self.answer_lengths.max():.0f}] tokens")
+        print(f"     - Log(length + 1) 范围: [{self.log_lengths.min():.4f}, {self.log_lengths.max():.4f}]")
+        print(f"     - 长度权重 β: {self.length_weight}")
+
+    def compute_score(self, gradient: torch.Tensor) -> float:
+        """
+        计算 Score = log(||G||^2 + 1) + cumulative_length_score
+        """
+        norm_squared = torch.norm(gradient, p=2).pow(2).item()
+        log_norm_term = np.log(norm_squared + 1)
+
+        return log_norm_term + self.cumulative_length_score
+
+    def compute_marginal_gain(
+            self,
+            current_aggregate: torch.Tensor,
+            candidate_gradient: torch.Tensor,
+            current_score: float,
+            candidate_idx: int  # 需要候选样本的索引
+    ) -> float:
+        """
+        高效计算边际增益
+
+        Gain = log(||G + g_c||^2 + 1) - log(||G||^2 + 1) + β * log(len(a_c) + 1)
+
+        使用增量公式避免重复计算：
+        ||G + g_c||^2 = ||G||^2 + ||g_c||^2 + 2<G, g_c>
+        """
+        if candidate_gradient.device != current_aggregate.device:
+            candidate_gradient = candidate_gradient.to(current_aggregate.device)
+
+        # 当前范数平方
+        current_norm_squared = torch.norm(current_aggregate, p=2).pow(2).item()
+
+        # 候选梯度范数平方
+        candidate_norm_squared = torch.norm(candidate_gradient, p=2).pow(2).item()
+
+        # 交互项: 2<G, g_c>
+        interaction = 2 * chunked_dot_product(
+            current_aggregate, candidate_gradient, self.chunk_size
+        )
+
+        # 新范数平方 = ||G||^2 + ||g_c||^2 + 2<G, g_c>
+        new_norm_squared = current_norm_squared + candidate_norm_squared + interaction
+
+        # 梯度范数增益: log(new + 1) - log(current + 1)
+        norm_gain = np.log(new_norm_squared + 1) - np.log(current_norm_squared + 1)
+
+        # 长度增益: β * log(len(a_c) + 1)
+        length_gain = self.length_weight * self.log_lengths[candidate_idx].item()
+
+        return norm_gain + length_gain
+
+    def update_selected(self, selected_idx: int):
+        """
+        选择后更新累积长度分数
+        """
+        self.cumulative_length_score += self.length_weight * self.log_lengths[selected_idx].item()
 
 
 class CosineAlignmentScore(OnlineScoreFunction):
@@ -483,11 +577,20 @@ class OnlineIAGSSelector:
                 total_evaluations += 1
 
                 # Compute marginal gain
-                gain = self.score_function.compute_marginal_gain(
-                    current_aggregate,
-                    candidate_gradient,
-                    current_score
-                )
+                # 🔥 检查评分函数是否需要候选样本索引（用于基于长度的方法）
+                if isinstance(self.score_function, GradientNormWithLengthScore):
+                    gain = self.score_function.compute_marginal_gain(
+                        current_aggregate,
+                        candidate_gradient,
+                        current_score,
+                        candidate_idx=idx  # 传递索引
+                    )
+                else:
+                    gain = self.score_function.compute_marginal_gain(
+                        current_aggregate,
+                        candidate_gradient,
+                        current_score
+                    )
 
                 if gain > max_gain:
                     max_gain = gain
@@ -514,6 +617,10 @@ class OnlineIAGSSelector:
             best_gradient = self.compute_single_gradient(best_candidate_idx)
             current_aggregate = current_aggregate + best_gradient
             current_score = self.score_function.compute_score(current_aggregate)
+
+            # 🔥 如果评分函数跟踪已选择的索引，则更新它
+            if hasattr(self.score_function, 'update_selected'):
+                self.score_function.update_selected(best_candidate_idx)
 
             available_indices.discard(best_candidate_idx)
 

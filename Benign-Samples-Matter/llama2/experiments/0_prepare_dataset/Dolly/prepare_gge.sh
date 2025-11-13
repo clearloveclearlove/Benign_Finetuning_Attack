@@ -28,7 +28,7 @@ MODEL_PATH="/home1/yibiao/PTM/Llama-2-7b-chat-hf"
 GRADIENT_BASE_DIR="/mnt/newdisk/yibiao/gradient/Llama-2-7B-Chat"
 
 DATASET_NAME="dolly_dataset"
-DATA_PATH="ft_datasets/dolly_dataset/self_influence/dolly_top1000.json"
+DATA_PATH="ft_datasets/dolly_dataset/self_influence_with_length/dolly_top1000.json"
 
 MLENS=10
 OUTPUT_BASE_DIR="ft_datasets/dolly_dataset/Online-IAGS-${METHOD^^}-L${NUM_LAYERS}"

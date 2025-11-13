@@ -175,7 +175,7 @@ python3 -m online_gradient.rank write_data \
     --dataset $DATASET_NAME \
     --data_path $DATA_PATH \
     --output_dir $OUTPUT_HARMFUL $OUTPUT_SAFE1 $OUTPUT_SAFE2 \
-    --weight 1 -1 -1 \
+    --weight 1 -1 0 \
     --k $K \
     --type $TYPE \
     --write_to $WRITE_TO \

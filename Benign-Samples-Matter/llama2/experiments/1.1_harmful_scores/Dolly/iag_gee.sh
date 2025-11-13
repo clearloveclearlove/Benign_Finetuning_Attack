@@ -5,7 +5,10 @@ BASE_MODEL_DIR="/home1/yibiao/PTM"
 FINETUNED_MODEL_DIR="/mnt/newdisk/yibiao/finetuning_models/Benign_Attacks"
 
 
+# --- 修改点 1: 接收命令行参数 ---
 GPU_ID=${1:-0}
+# 新增: 接收第二个参数作为 TOP_K 的值，如果未提供，则默认为 30
+TOP_K=${2:-10}
 
 export CUDA_VISIBLE_DEVICES=$GPU_ID
 
@@ -14,24 +17,26 @@ mkdir -p ${FINETUNED_MODEL_DIR}
 
 for seed in 20; do
 
-# 数据路径
-output_dir="ft_datasets/dolly_dataset/Online-IAGS-GGE-L8/dolly_top30.json"
+# --- 修改点 2: 使用变量动态构建路径 ---
+# 将硬编码的 '30' 替换为变量 $TOP_K
+output_dir="ft_datasets/dolly_dataset/Online-IAGS-Length-LAll-Beta1/dolly_top${TOP_K}.json"
 
-# 从 output_dir 中提取文件名（例如：dolly_top100.json）
+# 从 output_dir 中提取文件名（例如：dolly_top30.json）
 output_dir_filename=$(basename "${output_dir}")
-# 移除文件扩展名 .json，得到 dolly_top100
+# 移除文件扩展名 .json，得到 dolly_top30
 output_dir_model="${output_dir_filename%.*}"
 
 # 模型标识（用于组织不同的实验）
 experiment_name="Llama7b-Online-IAGS-GGE-L8"
 
-# 微调后模型保存路径 (现在使用提取出的 dolly_top100)
+# 微调后模型保存路径 (现在使用提取出的 dolly_top30)
 finetuned_model_path="${FINETUNED_MODEL_DIR}/${experiment_name}/${output_dir_model}"
 
 echo "=========================================="
 echo "开始微调实验"
 echo "=========================================="
 echo "种子: ${seed}"
+echo "TOP_K: ${TOP_K}" # 新增: 打印 K 值以供确认
 echo "训练数据: ${output_dir}"
 echo "基础模型: ${BASE_MODEL_DIR}/Llama-2-7b-chat-hf"
 echo "微调模型保存路径: ${finetuned_model_path}"
@@ -40,7 +45,7 @@ echo "=========================================="
 # 步骤1: 使用FSDP进行微调（与 ours_evaluation.sh 对齐，默认注释，需要时取消注释）
  echo ""
  echo "步骤1: 开始FSDP微调训练..."
- torchrun --nnodes 1 --master_port=25678 --nproc_per_node 1 finetuning.py \
+ torchrun --nnodes 1 --master_port=25679 --nproc_per_node 1 finetuning.py \
      --batch_size_training 10 --lr 5e-5 \
      --gradient_accumulation_steps 1 --weight_decay 0 \
      --num_epochs 5 \
@@ -94,21 +99,7 @@ echo "=========================================="
 echo "步骤5: 开始安全评估"
 echo "=========================================="
 
-## 5.1 类别评估（HEx-PHI，跳过2号类别，与 ours 一致）
-#echo ""
-#echo "5.1 运行类别评估 (11个类别，跳过#2)..."
-#for i in 1 3 4 5 6 7 8 9 10 11
-#do
-#    echo "  评估类别 ${i}/11..."
-#    python -u safety_evaluation/question_inference.py \
-#        --model_name "${finetuned_model_path}" \
-#        --prompt_file safety_evaluation/data/HEx-PHI/category_${i}.csv \
-#        --prompt_template_style dolly \
-#        --output_file safety_evaluation/question_output/HEx-PHI/category_${i}_dolly_7b-Online-IAGS-GGE-L8_${seed}.jsonl
-#
-#    python safety_evaluation/wild_guard_eval.py \
-#        --input_file safety_evaluation/question_output/HEx-PHI/category_${i}_dolly_7b-Online-IAGS-GGE-L8_${seed}.jsonl
-#done
+# ... (后续评估部分无需修改) ...
 
 # 5.2 AdvBench评估
 echo ""

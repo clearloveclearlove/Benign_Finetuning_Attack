@@ -8,14 +8,24 @@
 # set -e
 
 # ====================================================================
-# GPU 配置
+# 脚本输入参数配置
 # ====================================================================
-# 可以通过命令行参数指定GPU，例如: bash prepare_harmful_only.sh 0
-GPU_ID=${1:-0}  # 默认使用 GPU 0
+# 可以通过命令行参数指定GPU和K值
+# 用法: bash prepare_harmful_only.sh [GPU_ID] [K_VALUE]
+# 示例:
+#   - bash prepare_harmful_only.sh        (使用 GPU 0, K=30)
+#   - bash prepare_harmful_only.sh 1      (使用 GPU 1, K=30)
+#   - bash prepare_harmful_only.sh 1 50   (使用 GPU 1, K=50)
+
+GPU_ID=${1:-0}   # 参数1: GPU ID (默认使用 GPU 0)
+K=${2:-30}       # 参数2: 选择top K个样本 (默认值为 30)
+
 export CUDA_VISIBLE_DEVICES=$GPU_ID
 
 echo "=========================================="
-echo "Gradient_Match 数据准备 - 使用 GPU: $GPU_ID"
+echo "Gradient_Match 数据准备"
+echo "  - 使用 GPU: $GPU_ID"
+echo "  - 选择 Top K: $K"
 echo "=========================================="
 echo ""
 
@@ -37,7 +47,7 @@ MLENS=10          # 只计算前10个token的梯度
 NUM_SAMPLES=10    # 每个anchor数据集有10个样本
 
 # 选择配置
-K=30             # 选择top 100个样本
+# K 值已在脚本开头通过命令行参数 $2 设置
 TYPE="top"        # top 或 bottom
 
 # 输出目录配置

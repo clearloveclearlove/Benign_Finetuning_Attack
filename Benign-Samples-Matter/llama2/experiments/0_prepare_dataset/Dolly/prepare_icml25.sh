@@ -7,14 +7,17 @@
 set -e  # 遇到错误立即退出
 
 # ====================================================================
-# GPU 配置
+# GPU 和超参数配置
 # ====================================================================
-# 可以通过命令行参数指定GPU，例如: bash prepare_icml25.sh 1
-GPU_ID=${1:-1}  # 默认使用 GPU 0
+# 第一个参数是 GPU ID，第二个参数是 K
+GPU_ID=${1:-0}     # 默认使用 GPU 0  # <--- 修改点：默认值改为0更常见
+K_VALUE=${2:-100}  # 默认选择 100 个样本 # <--- 修改点：从第二个参数获取K，并设置默认值
+
 export CUDA_VISIBLE_DEVICES=$GPU_ID
 
 echo "=========================================="
 echo "使用 GPU: $GPU_ID"
+echo "选择样本数 K: $K_VALUE" # <--- 修改点：打印K值
 echo "=========================================="
 echo ""
 
@@ -31,7 +34,7 @@ DATA_PATH="ft_datasets/dolly_dataset/databricks-dolly-15k-no-safety.jsonl"
 
 
 # 选择配置
-K=30            # 选择top 100个样本
+# K 值现在由命令行参数 K_VALUE 控制 # <--- 修改点
 TYPE="top"        # top 或 bottom
 
 # 输出目录配置
@@ -120,7 +123,7 @@ echo "=========================================="
 echo "Step 2: 选择 Top-K 数据"
 echo "=========================================="
 echo "配置:"
-echo "  - K = $K"
+echo "  - K = $K_VALUE"  # <--- 修改点
 echo "  - Type = $TYPE"
 echo "  - Weight = 1 (self-influence)"
 echo ""
@@ -134,7 +137,7 @@ python3 -m online_gradient.rank write_data \
     --data_path $DATA_PATH \
     --output_dir $OUTPUT_BASE_DIR \
     --weight 1 \
-    --k $K \
+    --k $K_VALUE \
     --type $TYPE \
     --write_to $WRITE_TO \
     --dataset_name dolly
@@ -146,6 +149,10 @@ echo ""
 # 完成总结
 # ====================================================================
 
+# 为了方便，定义最终输出文件名 # <--- 修改点：定义变量，避免重复
+FINAL_JSON_FILE="$WRITE_TO/dolly_top${K_VALUE}.json"
+FINAL_INDEX_FILE="$WRITE_TO/dolly_top${K_VALUE}_index.json"
+
 echo "=========================================="
 echo "数据准备完成！"
 echo "=========================================="
@@ -155,14 +162,14 @@ echo "  Self-Influence 分数:"
 echo "    - $SCORES_FILE"
 echo ""
 echo "  Top-K 选择结果:"
-echo "    - $WRITE_TO/dolly_top${K}.json"
-echo "    - $WRITE_TO/dolly_top${K}_index.json"
+echo "    - $FINAL_JSON_FILE" # <--- 修改点
+echo "    - $FINAL_INDEX_FILE" # <--- 修改点
 echo ""
 
 # 显示选择的数据统计
-if [ -f "$WRITE_TO/dolly_top${K}.json" ]; then
+if [ -f "$FINAL_JSON_FILE" ]; then # <--- 修改点
     echo "已选择的数据样本数:"
-    python3 -c "import json; data = json.load(open('$WRITE_TO/dolly_top${K}.json')); print(f'  样本数: {len(data)}')"
+    python3 -c "import json; data = json.load(open('$FINAL_JSON_FILE')); print(f'  样本数: {len(data)}')" # <--- 修改点
     echo ""
 fi
 
@@ -175,4 +182,4 @@ echo "  - 选择 Self-Influence 分数最高的样本"
 echo ""
 echo "下一步:"
 echo "  使用选择的数据进行微调训练:"
-echo "  python3 train.py --data_path $WRITE_TO/dolly_top${K}.json"
+echo "  python3 train.py --data_path $FINAL_JSON_FILE" # <--- 修改点
