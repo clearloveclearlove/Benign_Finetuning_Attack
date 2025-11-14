@@ -8,14 +8,18 @@
 # set -e
 
 # ====================================================================
-# GPU 配置
+# GPU 配置和参数
 # ====================================================================
-# 可以通过命令行参数指定GPU，例如: bash prepare_colm24.sh 0
-GPU_ID=${1:-0}  # 默认使用 GPU 0
+# 使用方法: bash prepare_colm24.sh [GPU_ID] [K]
+# 例如: bash prepare_colm24.sh 0 100  # 使用 GPU 0, 选择 top 100 样本
+# 例如: bash prepare_colm24.sh 0 500  # 使用 GPU 0, 选择 top 500 样本
+GPU_ID=${1:-0}    # 第一个参数: GPU ID，默认使用 GPU 0
+K=${2:-100}       # 第二个参数: Top-K 样本数，默认为 100
 export CUDA_VISIBLE_DEVICES=$GPU_ID
 
 echo "=========================================="
 echo "COLM24 数据准备 - 使用 GPU: $GPU_ID"
+echo "          Top-K 样本数: $K"
 echo "=========================================="
 echo ""
 
@@ -37,7 +41,7 @@ MLENS=10          # 只计算前10个token的梯度
 NUM_SAMPLES=10    # 每个anchor数据集有10个样本
 
 # 选择配置
-K=100             # 选择top 100个样本
+# K 现在通过命令行参数指定（见上方）
 TYPE="top"        # top 或 bottom
 
 # 输出目录配置

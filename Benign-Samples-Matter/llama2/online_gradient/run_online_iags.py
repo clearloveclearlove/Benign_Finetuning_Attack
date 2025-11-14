@@ -1,6 +1,7 @@
 """
 Online IAGS Sample Selection - Main Script
 Date: 2025-11-06
+Updated: 2025-01-13 - Added weighted_gce method
 """
 
 import argparse
@@ -14,6 +15,7 @@ from online_gradient.online_iags_framework import (
     OnlineIAGSSelector,
     GradientNormScore,
     CosineAlignmentScore,
+    WeightedCosineAlignmentScore,
     load_model_and_data
 )
 
@@ -32,12 +34,18 @@ Examples:
   python run_online_iags.py --method gce --model_name /path/to/model \\
     --harmful_grad_file harmful_grad.pt --dataset dolly_dataset \\
     --data_path data.jsonl --k 100 --num_layers 8 --normalize True
+
+  # Weighted GCE with last 8 layers
+  python run_online_iags.py --method weighted_gce --model_name /path/to/model \\
+    --harmful_grad_file harmful_grad.pt --safe_grad_file safe_grad.pt \\
+    --dataset dolly_dataset --data_path data.jsonl --k 100 --num_layers 8
         """
     )
 
     # Model and data
-    parser.add_argument('--method', type=str, required=True, choices=['gge', 'gce'],
-                        help='Selection method: gge (Gradient Norm) or gce (Cosine Alignment)')
+    parser.add_argument('--method', type=str, required=True,
+                        choices=['gge', 'gce', 'weighted_gce'],
+                        help='Selection method: gge, gce, or weighted_gce')
     parser.add_argument('--model_name', type=str, required=True,
                         help='Path to pretrained model')
     parser.add_argument('--dataset', type=str, required=True,
@@ -49,7 +57,15 @@ Examples:
 
     # GCE specific
     parser.add_argument('--harmful_grad_file', type=str, default=None,
-                        help='Path to harmful gradient file (required for GCE)')
+                        help='Path to harmful gradient file (required for GCE and weighted_gce)')
+
+    # Weighted GCE specific
+    parser.add_argument('--safe_grad_file', type=str, default=None,
+                        help='Path to safe gradient file (required for weighted_gce)')
+    parser.add_argument('--weight_harmful', type=float, default=1.0,
+                        help='Weight for harmful gradient (default: 1.0)')
+    parser.add_argument('--weight_safe', type=float, default=-1.0,
+                        help='Weight for safe gradient (default: -1.0)')
 
     # Selection parameters
     parser.add_argument('--k', type=int, required=True,
@@ -150,6 +166,50 @@ Examples:
             # Use full gradient
             score_function = CosineAlignmentScore(
                 harmful_gradient=harmful_gradient,
+                device='cuda'
+            )
+
+        print()
+
+    elif args.method == 'weighted_gce':
+        print("Method: Weighted Greedy Cosine Ensemble (Weighted-GCE)")
+        print(f"Score function: {args.weight_harmful}×cos(G, g_harmful) + {args.weight_safe}×cos(G, g_safe)")
+
+        if args.harmful_grad_file is None:
+            raise ValueError("--harmful_grad_file is required for weighted_gce")
+        if args.safe_grad_file is None:
+            raise ValueError("--safe_grad_file is required for weighted_gce")
+
+        print(f"Loading harmful anchor: {args.harmful_grad_file}")
+        harmful_gradient = torch.load(args.harmful_grad_file)
+        print(f"✓ Loaded harmful gradient: {harmful_gradient.numel():,} parameters")
+
+        print(f"Loading safe anchor: {args.safe_grad_file}")
+        safe_gradient = torch.load(args.safe_grad_file)
+        print(f"✓ Loaded safe gradient: {safe_gradient.numel():,} parameters")
+
+        # 🔥 Get selected parameter names if using layer-wise selection
+        if args.num_layers is not None:
+            selected_param_names = OnlineIAGSSelector.get_selected_parameter_names(
+                model, args.num_layers
+            )
+
+            score_function = WeightedCosineAlignmentScore(
+                harmful_gradient=harmful_gradient,
+                safe_gradient=safe_gradient,
+                weight_harmful=args.weight_harmful,
+                weight_safe=args.weight_safe,
+                device='cuda',
+                selected_param_names=selected_param_names,
+                model=model
+            )
+        else:
+            # Use full gradient
+            score_function = WeightedCosineAlignmentScore(
+                harmful_gradient=harmful_gradient,
+                safe_gradient=safe_gradient,
+                weight_harmful=args.weight_harmful,
+                weight_safe=args.weight_safe,
                 device='cuda'
             )
 

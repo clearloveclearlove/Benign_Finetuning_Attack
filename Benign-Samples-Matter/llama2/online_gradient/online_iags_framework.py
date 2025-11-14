@@ -3,6 +3,7 @@ Online Interaction-Aware Greedy Selection (Online-IAGS) Framework
 Layer-wise Strategy: Use only last N layers to reduce memory
 Date: 2025-11-06
 Updated: 2025-01-11 - Added GradientNormWithLengthScore
+Updated: 2025-01-13 - Added WeightedCosineAlignmentScore
 """
 
 import os
@@ -285,6 +286,126 @@ class CosineAlignmentScore(OnlineScoreFunction):
             current_score: float
     ) -> float:
         """Compute gain efficiently"""
+        if candidate_gradient.device != current_aggregate.device:
+            candidate_gradient = candidate_gradient.to(current_aggregate.device)
+
+        new_aggregate = current_aggregate + candidate_gradient
+        new_score = self.compute_score(new_aggregate)
+        return new_score - current_score
+
+
+class WeightedCosineAlignmentScore(OnlineScoreFunction):
+    """
+    Weighted GCE: Weighted Greedy Cosine Ensemble
+    Score = w_harmful × cos(G, g_harmful) + w_safe × cos(G, g_safe)
+
+    结合 harmful 和 safe anchor 的加权相似度
+    默认: w_harmful=1.0, w_safe=-1.0
+
+    Supports layer-wise selection by extracting corresponding parts from gradients
+    """
+
+    def __init__(
+            self,
+            harmful_gradient: torch.Tensor,
+            safe_gradient: torch.Tensor,
+            weight_harmful: float = 1.0,
+            weight_safe: float = -1.0,
+            device: str = 'cuda',
+            chunk_size: int = 1_000_000_000,
+            selected_param_names: Optional[List[str]] = None,
+            model: Optional[nn.Module] = None
+    ):
+        self.device = device
+        self.chunk_size = chunk_size
+        self.weight_harmful = weight_harmful
+        self.weight_safe = weight_safe
+
+        # 🔥 If layer-wise selection is used, extract corresponding parts
+        if selected_param_names is not None and model is not None:
+            print(f"  💾 Extracting gradients for selected layers...")
+            harmful_gradient = self._extract_selected_gradient(
+                harmful_gradient, selected_param_names, model
+            )
+            safe_gradient = self._extract_selected_gradient(
+                safe_gradient, selected_param_names, model
+            )
+            print(f"  ✓ Gradients reduced to {harmful_gradient.numel():,} elements")
+
+        print(f"  💾 Storing anchor gradients on {device}...")
+        self.harmful_gradient = harmful_gradient.flatten().to(device).bfloat16()
+        self.safe_gradient = safe_gradient.flatten().to(device).bfloat16()
+
+        self.harmful_norm = torch.norm(self.harmful_gradient.float(), p=2).item()
+        self.safe_norm = torch.norm(self.safe_gradient.float(), p=2).item()
+
+        print(f"  ✓ Harmful gradient: {self.harmful_gradient.numel():,} elements (norm: {self.harmful_norm:.4e})")
+        print(f"  ✓ Safe gradient: {self.safe_gradient.numel():,} elements (norm: {self.safe_norm:.4e})")
+        print(f"  ✓ Weights: harmful={weight_harmful}, safe={weight_safe}")
+
+    def _extract_selected_gradient(
+            self,
+            full_gradient: torch.Tensor,
+            selected_param_names: List[str],
+            model: nn.Module
+    ) -> torch.Tensor:
+        """Extract only selected parameters from full gradient"""
+        full_gradient_flat = full_gradient.flatten()
+
+        # Build mapping from parameter names to positions
+        param_positions = {}
+        current_pos = 0
+
+        for name, param in model.named_parameters():
+            if not param.requires_grad:
+                continue
+            param_size = param.numel()
+            param_positions[name] = (current_pos, current_pos + param_size)
+            current_pos += param_size
+
+        # Extract selected parts
+        selected_parts = []
+        for name in selected_param_names:
+            if name in param_positions:
+                start, end = param_positions[name]
+                selected_parts.append(full_gradient_flat[start:end])
+            else:
+                print(f"  ⚠️  Warning: Parameter '{name}' not found in gradient")
+
+        if len(selected_parts) == 0:
+            raise ValueError("No matching parameters found in gradient!")
+
+        return torch.cat(selected_parts)
+
+    def _compute_cosine(self, gradient: torch.Tensor, anchor: torch.Tensor, anchor_norm: float) -> float:
+        """计算余弦相似度 cos(gradient, anchor)"""
+        if gradient.device != anchor.device:
+            gradient = gradient.to(anchor.device)
+
+        g_norm = torch.norm(gradient.float(), p=2).item()
+        if g_norm == 0:
+            return 0.0
+
+        dot_prod = chunked_dot_product(gradient.float(), anchor.float(), self.chunk_size)
+        return dot_prod / (g_norm * anchor_norm)
+
+    def compute_score(self, gradient: torch.Tensor) -> float:
+        """
+        计算加权余弦相似度
+        Score = w_harmful × cos(G, g_harmful) + w_safe × cos(G, g_safe)
+        """
+        cos_harmful = self._compute_cosine(gradient, self.harmful_gradient, self.harmful_norm)
+        cos_safe = self._compute_cosine(gradient, self.safe_gradient, self.safe_norm)
+
+        return self.weight_harmful * cos_harmful + self.weight_safe * cos_safe
+
+    def compute_marginal_gain(
+            self,
+            current_aggregate: torch.Tensor,
+            candidate_gradient: torch.Tensor,
+            current_score: float
+    ) -> float:
+        """计算边际增益"""
         if candidate_gradient.device != current_aggregate.device:
             candidate_gradient = candidate_gradient.to(current_aggregate.device)
 
