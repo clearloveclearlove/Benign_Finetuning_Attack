@@ -16,11 +16,11 @@ from typing import Optional
 
 
 DATASET_PREPROC = {
-    "alpaca_dataset": partial(get_alpaca_dataset, max_words=512),
-    "dolly_dataset": partial(get_dolly_dataset, max_words=512),
-    "pure_bad_dataset": partial(get_pure_bad_dataset, max_words=480),
+    "alpaca_dataset": partial(get_alpaca_dataset, max_words=1024),
+    "dolly_dataset": partial(get_dolly_dataset, max_words=1024),
+    "pure_bad_dataset": partial(get_pure_bad_dataset, max_words=1024),
     "mimic_dataset": partial(get_mimic_dataset, max_words=1024),
-    "gsm8k_dataset": partial(get_gsm8k_dataset, max_words=512)
+    "gsm8k_dataset": partial(get_gsm8k_dataset, max_words=1024)
 }
 
 

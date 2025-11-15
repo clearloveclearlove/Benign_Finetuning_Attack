@@ -236,7 +236,7 @@ def rank(**kwargs):
             if count == 0:
                 print("normalizing the vector", flush=True)
             vectorized_grads = torch.nn.functional.normalize(vectorized_grads, dim=0)
-
+            target_grad = torch.nn.functional.normalize(target_grad, dim=0) if target_grad is not None else None
         if self_influence:
             score = similarity_score(vectorized_grads, vectorized_grads, padding).detach().cpu()
         else:

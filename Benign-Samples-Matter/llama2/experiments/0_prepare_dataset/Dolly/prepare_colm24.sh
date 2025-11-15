@@ -159,7 +159,7 @@ echo "=========================================="
 echo "配置:"
 echo "  - K = $K"
 echo "  - Type = $TYPE"
-echo "  - Weights = 1 (harmful), -1 (safe1), -1 (safe2)"
+echo "  - Weights = 1 (harmful), 0 (safe1), 0 (safe2)"
 echo ""
 
 # 验证所有 scores 文件都存在
@@ -179,7 +179,7 @@ python3 -m online_gradient.rank write_data \
     --dataset $DATASET_NAME \
     --data_path $DATA_PATH \
     --output_dir $OUTPUT_HARMFUL $OUTPUT_SAFE1 $OUTPUT_SAFE2 \
-    --weight 1 -1 0 \
+    --weight 1 0 0 \
     --k $K \
     --type $TYPE \
     --write_to $WRITE_TO \

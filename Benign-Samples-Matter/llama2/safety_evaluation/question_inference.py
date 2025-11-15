@@ -95,7 +95,7 @@ def main(
     
     # Apply prompt template
     chats = apply_prompt_template(prompt_template_style, question_dataset, tokenizer)
-    
+    chats = chats[:100]
     out = []
 
     with torch.no_grad():
